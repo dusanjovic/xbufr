@@ -1,0 +1,18 @@
+<RCC>
+    <qresource prefix="/">
+        <file>images/first.png</file>
+        <file>images/last.png</file>
+        <file>images/next.png</file>
+        <file>images/prev.png</file>
+        <file>images/bufr.png</file>
+        <file>fonts/MyFont-subset.ttf</file>
+        <file>fonts/MyFontMono-subset.ttf</file>
+        <file>images/bufr_128.png</file>
+        <file>images/bufr_64.png</file>
+        <file>images/bufr_48.png</file>
+        <file>images/bufr_32.png</file>
+        <file>images/bufr_24.png</file>
+        <file>images/bufr_16.png</file>
+        <file>images/bufr_256.png</file>
+    </qresource>
+</RCC>

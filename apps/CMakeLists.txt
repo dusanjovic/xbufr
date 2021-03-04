@@ -1,0 +1,15 @@
+add_subdirectory(utils)
+
+find_package(Qt6Widgets QUIET)
+if(Qt6_FOUND)
+  message(STATUS "Found Qt6 Version: ${Qt6Widgets_VERSION}")
+else()
+  find_package(Qt5 COMPONENTS Widgets QUIET)
+  if(Qt5_FOUND)
+    message(STATUS "Found Qt5 Version: ${Qt5Widgets_VERSION}")
+  endif()
+endif()
+
+if(Qt5_FOUND OR Qt6_FOUND)
+  add_subdirectory(xbufr)
+endif()

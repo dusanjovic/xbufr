@@ -1,0 +1,4 @@
+CMakeLists.txt.user
+apps/xbufr/version.h
+build/
+.DS_Store
