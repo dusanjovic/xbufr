@@ -13,14 +13,4 @@ else
   ID='-'
 fi
 
-REVSION=0
-if [ -e apps/xbufr/version.h ]; then
-  REVSION=$( grep REVISION apps/xbufr/version.h | cut -d' ' -f3- )
-fi
-
-if [ "${ID}" != "${REVSION}" ]; then
-  sed s:_GIT_REVISION_:${ID}: apps/xbufr/version.h.in > apps/xbufr/version.h
-  echo "New git revision $ID"
-else
-  echo "Same git revision $ID"
-fi
+echo "$ID"

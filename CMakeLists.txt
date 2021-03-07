@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 3.5)
 
-project(xbufr)
+file(STRINGS "VERSION" VERSION_STRING)
+
+project(xbufr VERSION ${VERSION_STRING})
 
 list(APPEND CMAKE_MODULE_PATH "cmake")
 
@@ -70,7 +72,13 @@ endif()
 
 enable_testing()
 
-execute_process(COMMAND "${CMAKE_CURRENT_SOURCE_DIR}/git_revision")
+execute_process(COMMAND bash "${CMAKE_CURRENT_SOURCE_DIR}/git_revision"
+                OUTPUT_VARIABLE GIT_REVISION)
+
+configure_file(
+    "${PROJECT_SOURCE_DIR}/apps/xbufr/version.h.in"
+    "${PROJECT_SOURCE_DIR}/apps/xbufr/version.h"
+)
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 

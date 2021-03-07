@@ -42,10 +42,10 @@ const char* const VERSION_STR = STRINGIFY(VERSION_MAJOR.VERSION_MINOR.VERSION_PA
 const char* const AUTHOR = "Dusan Jovic";
 const char* const YEAR = "2021";
 
-#ifdef REVISION
-const char* const REVISION_STR = STRINGIFY(REVISION);
+#ifdef GIT_REVISION
+const char* const GIT_REVISION_STR = STRINGIFY(GIT_REVISION);
 #else
-const char* const REVISION_STR = "";
+const char* const GIT_REVISION_STR = "";
 #endif
 
 #undef STRINGIFY
@@ -74,8 +74,8 @@ VersionDialog::VersionDialog(QWidget* parent)
     QString version = QLatin1String(VERSION_STR);
 
     QString appRev;
-#ifdef REVISION
-    appRev = tr("From revision %1<br/>").arg(QString::fromLatin1(REVISION_STR));
+#ifdef GIT_REVISION
+    appRev = tr("From revision %1<br/>").arg(QString::fromLatin1(GIT_REVISION_STR));
 #endif
 
     std::string platform;

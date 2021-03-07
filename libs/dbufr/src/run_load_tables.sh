@@ -38,5 +38,6 @@ done
  ./load_tables eccodes 0 0  78 0   2 $LOCAL
  ./load_tables eccodes 0 0  98 0   3 $LOCAL
  ./load_tables eccodes 0 0  78 0   3 $LOCAL
+ ./load_tables eccodes 0 0  98 0 101 $LOCAL
 
 rm -rf tables

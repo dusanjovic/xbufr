@@ -46,7 +46,7 @@ install(
   DESTINATION include
   FILES_MATCHING PATTERN "*.h")
 
-install(CODE "execute_process(COMMAND \"${CMAKE_CURRENT_SOURCE_DIR}/run_load_tables.sh\"
+install(CODE "execute_process(COMMAND bash \"${CMAKE_CURRENT_SOURCE_DIR}/run_load_tables.sh\"
                               WORKING_DIRECTORY \"${CMAKE_INSTALL_PREFIX}/bin\"
                              )"
        )
