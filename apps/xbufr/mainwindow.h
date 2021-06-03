@@ -73,7 +73,7 @@ private Q_SLOTS:
     void on_actionShow_BUFR_table_messages_toggled(bool arg1);
 
 protected:
-    virtual void changeEvent(QEvent* event);
+    void changeEvent(QEvent* event) override;
 
 private:
     void load_message(const int message_num);

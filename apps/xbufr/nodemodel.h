@@ -38,12 +38,12 @@ public:
 
     void set_root_node(NodeItem* node);
 
-    QModelIndex index(int row, int column, const QModelIndex& parent) const;
-    QModelIndex parent(const QModelIndex& index) const;
-    int rowCount(const QModelIndex& parent) const;
-    int columnCount(const QModelIndex& parent) const;
-    QVariant data(const QModelIndex& index, int role) const;
-    QVariant headerData(int column, Qt::Orientation orientation, int role) const;
+    QModelIndex index(int row, int column, const QModelIndex& parent) const override;
+    QModelIndex parent(const QModelIndex& index) const override;
+    int rowCount(const QModelIndex& parent) const override;
+    int columnCount(const QModelIndex& parent) const override;
+    QVariant data(const QModelIndex& index, int role) const override;
+    QVariant headerData(int column, Qt::Orientation orientation, int role) const override;
 
     QModelIndex index_from_node(const NodeItem* ni) const;
     const NodeItem* node_from_index(const QModelIndex& index) const;
