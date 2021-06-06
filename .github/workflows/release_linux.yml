@@ -1,0 +1,33 @@
+name: Release Linux
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    - name: Build
+      run: |
+        VERSION=$(cat VERSION)
+        echo "VERSION=${VERSION}" >> $GITHUB_ENV
+        docker build -t xbufr_linux -f docker/Dockerfile.alpine .
+        docker run --rm --entrypoint cat xbufr_linux /home/builder/xbufr_install/bin/xbufr > xbufr
+        docker run --rm --entrypoint cat xbufr_linux /home/builder/xbufr_install/bin/bufr_tables.db > bufr_tables.db
+        chmod u+x xbufr
+        tar zcvf xbufr-linux-${VERSION}.tar.gz xbufr  bufr_tables.db
+
+    - name: Release
+      uses: softprops/action-gh-release@v1
+      with:
+        tag_name: ${{ env.VERSION }}
+        files: |
+          ./xbufr*.tar.gz
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -1,0 +1,58 @@
+name: Release Windows
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+
+    runs-on: windows-latest
+    defaults:
+      run:
+        shell: msys2 {0}
+
+    steps:
+
+    - name: Update msys2 packages
+      uses: msys2/setup-msys2@v2
+      with:
+        msystem: MINGW64
+        update: true
+        install: >-
+          git
+          mingw-w64-x86_64-gcc
+          mingw-w64-x86_64-cmake
+          mingw-w64-x86_64-ninja
+          unzip
+          zip
+
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    - name: Build qt
+      run: |
+        mkdir qt610 && cd qt610
+        ../scripts/build_qt.sh
+
+    - name: Build
+      run: |
+        VERSION=$(cat VERSION)
+        echo "VERSION=${VERSION}" >> $GITHUB_ENV
+        mkdir build && cd build
+        cmake .. -G Ninja -DCMAKE_C_COMPILER=gcc -DCMAKE_CXX_COMPILER=g++ -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=${GITHUB_WORKSPACE}/qt610/qt-6.1.0 -DCMAKE_INSTALL_PREFIX=install
+        cmake --build .
+        cmake --install .
+        strip install/bin/xbufr.exe
+        cd install/bin
+        ../../../libs/dbufr/src/run_load_tables.sh
+        cd ../../
+        zip -j xbufr-windows-${VERSION}.zip install/bin/xbufr.exe install/bin/bufr_tables.db
+
+    - name: Release
+      uses: softprops/action-gh-release@v1
+      with:
+        tag_name: ${{ env.VERSION }}
+        files: |
+          ./build/xbufr*.zip
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -72,8 +72,20 @@ endif()
 
 enable_testing()
 
-execute_process(COMMAND bash "${CMAKE_CURRENT_SOURCE_DIR}/git_revision"
-                OUTPUT_VARIABLE GIT_REVISION)
+set(GIT_REVISION "Unknown")
+find_package(Git QUIET)
+if(GIT_FOUND)
+  execute_process(
+    COMMAND ${GIT_EXECUTABLE} describe --always --abbrev=40
+    WORKING_DIRECTORY "${PROJECT_SOURCE_DIR}"
+    OUTPUT_VARIABLE GIT_REVISION
+    ERROR_QUIET
+    OUTPUT_STRIP_TRAILING_WHITESPACE
+  )
+  message(STATUS "GIT hash:    ${GIT_REVISION}")
+else()
+  message(STATUS "GIT not found")
+endif()
 
 configure_file(
     "${PROJECT_SOURCE_DIR}/apps/xbufr/version.h.in"

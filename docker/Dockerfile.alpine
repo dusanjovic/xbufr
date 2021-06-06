@@ -1,0 +1,12 @@
+FROM dusanjovic/alpine_qt6
+MAINTAINER Dusan Jovic
+
+USER builder
+WORKDIR /home/builder
+RUN mkdir xbufr
+COPY --chown=builder:builder . /home/builder/xbufr
+
+RUN mkdir build && cd build \
+ && cmake ../xbufr -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/home/builder/xbufr_install \
+ && make -j 2 install \
+ && strip /home/builder/xbufr_install/bin/xbufr

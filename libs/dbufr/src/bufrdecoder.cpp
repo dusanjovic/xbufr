@@ -1629,7 +1629,7 @@ void BUFRDecoder::read_table_a_ncep(std::vector<FXY>& tablea_descriptor_list, Bi
     } else if (y == 2) { // 16-bit delay
         niter = br.get_int(16);
     } else {
-        throw std::runtime_error("Error in  BUFRMessage::read_table_a_ncep: unknown delayed replication");
+        throw std::runtime_error("Error in BUFRMessage::read_table_a_ncep: unknown delayed replication");
     }
 
     // We will now read niter times 3 descriptors [00_00_001, 00_00_002 and 00_00_003]

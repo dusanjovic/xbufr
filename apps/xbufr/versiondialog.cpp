@@ -75,7 +75,10 @@ VersionDialog::VersionDialog(QWidget* parent)
 
     QString appRev;
 #ifdef GIT_REVISION
-    appRev = tr("From revision %1<br/>").arg(QString::fromLatin1(GIT_REVISION_STR));
+    QString git_revision = QString::fromLatin1(GIT_REVISION_STR);
+    if (!git_revision.isEmpty()) {
+        appRev = tr("From revision %1<br/>").arg(git_revision);
+    }
 #endif
 
     std::string platform;
