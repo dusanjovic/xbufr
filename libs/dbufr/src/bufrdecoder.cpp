@@ -319,7 +319,7 @@ void BUFRDecoder::dump_section_3(std::ostream& ostr) const
     ostr << '\n';
 }
 
-void BUFRDecoder::decode_section_4(NodeItem* const message_nodeitem)
+void BUFRDecoder::decode_section_4(NodeItem* const nodeitem)
 {
     if (m_number_of_data_subsets == 0) {
         // std::cerr << "BUFRDecoder::decode_section_4: trying to decode message with 0 subsets" << '\n';
@@ -354,10 +354,10 @@ void BUFRDecoder::decode_section_4(NodeItem* const message_nodeitem)
             m_expanded_descriptors_for_bitmap.clear();
 
             if (m_flag_compressed) {
-                read_descriptor_list(m_data_descriptor_list, 1, br, 0, message_nodeitem);
-                m_subset_nodes.push_back(message_nodeitem);
+                read_descriptor_list(m_data_descriptor_list, 1, br, 0, nodeitem);
+                m_subset_nodes.push_back(nodeitem);
             } else {
-                NodeItem* subset_nodeitem = message_nodeitem->add_child();
+                NodeItem* subset_nodeitem = nodeitem->add_child();
                 Item& subset_item = subset_nodeitem->data();
                 std::stringstream ostr;
                 ostr << "Subset: " << n + 1;
@@ -372,9 +372,9 @@ void BUFRDecoder::decode_section_4(NodeItem* const message_nodeitem)
         assert(32 + br.get_pos() + br.get_remaining_bits() == m_sec4_length * 8);
         assert(m_subset_nodes.size() == num_of_subset);
 
-        collect_code_flags(message_nodeitem);
+        collect_code_flags(nodeitem);
         m_tablef->populate_code_flags(m_code_meaning, m_loaded_b_descriptors);
-        build_code_flags(message_nodeitem);
+        build_code_flags(nodeitem);
 
         m_decoded = true;
     }
@@ -687,8 +687,9 @@ void BUFRDecoder::read_element_descriptor(const FXY fxy,
             item.values.emplace_back(std::move(value));
 
             return; // RETURN RETURN
+        }
 
-        } else if (m_new_refval_bits == 0 || m_new_refval_bits == 255) {
+        if (m_new_refval_bits == 0 || m_new_refval_bits == 255) {
             // end use of modified references
         } else {
             throw std::runtime_error(fmt::format("Error BUFRMessage::read_element_descriptor: Unknown value for m_new_refval_bits {}", m_new_refval_bits));
@@ -835,7 +836,9 @@ void BUFRDecoder::read_replication_descriptor(const FXY fxy,
 
         const size_t desc_next = desc + 1;
         const FXY next_desc = descriptor_list[desc_next];
-        int f_next, x_next, y_next;
+        int f_next;
+        int x_next;
+        int y_next;
         next_desc.fxy(f_next, x_next, y_next);
 
         NodeItem* delayed_nodeitem = parent_nodeitem->add_child();
@@ -1065,7 +1068,7 @@ void BUFRDecoder::read_operator_descriptor(const FXY fxy,
                 m_backward_reference = (int)m_expanded_descriptors_for_bitmap.size();
             }
         } else if (y == 255) {
-            ; // FIXME
+            // FIXME
         } else {
             throw std::runtime_error(fmt::format("Unknown operand (YYY) for operator 2 23 YYY. y = ", y));
         }
@@ -1126,7 +1129,9 @@ void BUFRDecoder::read_operator_descriptor(const FXY fxy,
         DEBUGLN(operator_str);
         assert(y == 0);
         // the next descriptor must be 1-01-YYY.
-        int next_f, next_x, next_y;
+        int next_f;
+        int next_x;
+        int next_y;
         fxy_next.fxy(next_f, next_x, next_y);
         if (next_f != 1 || next_x != 1) {
             throw std::runtime_error("next descriptor after 2-36-YYY is not 1-01-YYY");
@@ -1213,7 +1218,9 @@ void BUFRDecoder::read_sequence_descriptor(const FXY fxy,
         desc_d.set_mnemonic(FXY(desc_d_f, desc_d_x, desc_d_y).as_str());
         desc_d.set_description(FXY(desc_d_f, desc_d_x, desc_d_y).as_str());
 
-        int f_next, x_next, y_next;
+        int f_next;
+        int x_next;
+        int y_next;
 
         if (m_originating_center == 7) { // NCEP
             desc++;                      // this next descriptor should be 2_05_YYY where YYY is the number of characters. 64 in this case
@@ -1479,7 +1486,7 @@ void BUFRDecoder::build_code_flags(NodeItem* ni)
         if (desc.is_code()) {
             // look up code/flag table if this descriptor is a code/flag
             if (!item.missing) {
-                assert(item.values.size() > 0);
+                assert(!item.values.empty());
                 assert(item.values[0].type == Item::ValueType::Double);
                 assert(item.values[0].d < INT_MAX);
                 uint64_t f = (uint64_t)fxy.as_int() << 32 | (unsigned int)item.values[0].d;
@@ -1489,7 +1496,7 @@ void BUFRDecoder::build_code_flags(NodeItem* ni)
             }
         } else if (desc.is_flag()) {
             if (!item.missing) {
-                assert(item.values.size() > 0);
+                assert(!item.values.empty());
                 assert(item.values[0].type == Item::ValueType::Double);
                 const int single_value = (int)item.values[0].d;
 
@@ -1593,7 +1600,7 @@ int BUFRDecoder::load_tables()
     return 0;
 }
 
-void BUFRDecoder::read_table_a_ncep(std::vector<FXY>& tablea_descriptor_list, BitReader& br)
+void BUFRDecoder::read_table_a_ncep(std::vector<FXY>& descriptor_list, BitReader& br)
 {
     // assumes that the order of the descriptors in descriptor_list is:
 
@@ -1610,13 +1617,13 @@ void BUFRDecoder::read_table_a_ncep(std::vector<FXY>& tablea_descriptor_list, Bi
     int desc_idx;
 
     desc_idx = 0;
-    tablea_descriptor_list[desc_idx].fxy(f, x, y);
+    descriptor_list[desc_idx].fxy(f, x, y);
     if (f != 1 || x != 3 || y != 0) {
         throw std::runtime_error("Error in BUFRMessage::read_table_a_ncep: didn't find iterator 01_03_000 ");
     }
 
     desc_idx = 1;
-    tablea_descriptor_list[desc_idx].fxy(f, x, y);
+    descriptor_list[desc_idx].fxy(f, x, y);
     if (f != 0 || x != 31) {
         throw std::runtime_error("Error in BUFRMessage::read_table_a_ncep: didn't find iterator 00_31_YYY");
     }
@@ -1639,30 +1646,30 @@ void BUFRDecoder::read_table_a_ncep(std::vector<FXY>& tablea_descriptor_list, Bi
     for (int iter = 0; iter < niter; iter++) {
 
         desc_idx = 2;
-        tablea_descriptor_list[desc_idx].fxy(f, x, y);
+        descriptor_list[desc_idx].fxy(f, x, y);
         if (f != 0 || x != 0 || y != 1) {
             throw std::runtime_error("Error in BUFRMessage::read_table_a_ncep: didn't find 00_00_001");
         }
         Item item_table_a_entry;
-        read_element_descriptor(tablea_descriptor_list[desc_idx], br, item_table_a_entry, 0);
+        read_element_descriptor(descriptor_list[desc_idx], br, item_table_a_entry, 0);
         std::string table_a_entry = item_table_a_entry.as_string();
 
         desc_idx = 3;
-        tablea_descriptor_list[desc_idx].fxy(f, x, y);
+        descriptor_list[desc_idx].fxy(f, x, y);
         if (f != 0 || x != 0 || y != 2) {
             throw std::runtime_error("Error in BUFRMessage::read_table_a_ncep: didn't find 00_00_002");
         }
         Item item_line1;
-        read_element_descriptor(tablea_descriptor_list[desc_idx], br, item_line1, 0);
+        read_element_descriptor(descriptor_list[desc_idx], br, item_line1, 0);
         std::string table_a_line1 = item_line1.as_string();
 
         desc_idx = 4;
-        tablea_descriptor_list[desc_idx].fxy(f, x, y);
+        descriptor_list[desc_idx].fxy(f, x, y);
         if (f != 0 || x != 0 || y != 3) {
             throw std::runtime_error("Error in BUFRMessage::read_table_a_ncep: didn't find 00_00_003");
         }
         Item item_line2;
-        read_element_descriptor(tablea_descriptor_list[desc_idx], br, item_line2, 0);
+        read_element_descriptor(descriptor_list[desc_idx], br, item_line2, 0);
         std::string table_a_line2 = item_line2.as_string();
 
         m_tablea->add_descriptor(DescriptorTableA(0, 0, 0, table_a_entry, table_a_line1 + table_a_line2));
@@ -1670,10 +1677,10 @@ void BUFRDecoder::read_table_a_ncep(std::vector<FXY>& tablea_descriptor_list, Bi
     // table A has been loaded now.
 
     // remove first 5 elements from the descriptor list that have been used for table A.
-    tablea_descriptor_list.erase(tablea_descriptor_list.begin(), tablea_descriptor_list.begin() + 5);
+    descriptor_list.erase(descriptor_list.begin(), descriptor_list.begin() + 5);
 }
 
-void BUFRDecoder::read_table_a_ecmwf(std::vector<FXY>& tablea_descriptor_list, BitReader& br)
+void BUFRDecoder::read_table_a_ecmwf(std::vector<FXY>& descriptor_list, BitReader& br)
 {
     // assumes that the order of the descriptors in descriptor_list is:
     // 00_00_001
@@ -1690,45 +1697,45 @@ void BUFRDecoder::read_table_a_ecmwf(std::vector<FXY>& tablea_descriptor_list, B
     int desc_idx;
 
     desc_idx = 0;
-    tablea_descriptor_list[desc_idx].fxy(f, x, y);
+    descriptor_list[desc_idx].fxy(f, x, y);
     if (f != 0 || x != 0 || y != 1) {
         throw std::runtime_error("Error in BUFRMessage::read_table_a_ecmwf: didn't find 00_00_001");
     }
     Item item_table_a_entry;
-    read_element_descriptor(tablea_descriptor_list[desc_idx], br, item_table_a_entry, 0);
+    read_element_descriptor(descriptor_list[desc_idx], br, item_table_a_entry, 0);
     std::string table_a_entry = item_table_a_entry.as_string();
 
     desc_idx = 1;
-    tablea_descriptor_list[desc_idx].fxy(f, x, y);
+    descriptor_list[desc_idx].fxy(f, x, y);
     if (f != 0 || x != 0 || y != 2) {
         throw std::runtime_error("Error in BUFRMessage::read_table_a_ecmwf: didn't find 00_00_002");
     }
     Item item_line1;
-    read_element_descriptor(tablea_descriptor_list[desc_idx], br, item_line1, 0);
+    read_element_descriptor(descriptor_list[desc_idx], br, item_line1, 0);
     std::string table_a_line1 = item_line1.as_string();
 
     desc_idx = 2;
-    tablea_descriptor_list[desc_idx].fxy(f, x, y);
+    descriptor_list[desc_idx].fxy(f, x, y);
     if (f != 0 || x != 0 || y != 3) {
         throw std::runtime_error("Error in BUFRMessage::read_table_a_ecmwf: didn't find 00_00_003");
     }
     Item item_line2;
-    read_element_descriptor(tablea_descriptor_list[desc_idx], br, item_line2, 0);
+    read_element_descriptor(descriptor_list[desc_idx], br, item_line2, 0);
     std::string table_a_line2 = item_line2.as_string();
 
     m_tablea->add_descriptor(DescriptorTableA(0, 0, 0, table_a_entry, table_a_line1 + table_a_line2));
 
     Item item_rest;
-    read_element_descriptor(tablea_descriptor_list[3], br, item_rest, 0);
+    read_element_descriptor(descriptor_list[3], br, item_rest, 0);
 
-    read_element_descriptor(tablea_descriptor_list[4], br, item_rest, 0);
+    read_element_descriptor(descriptor_list[4], br, item_rest, 0);
 
-    read_element_descriptor(tablea_descriptor_list[5], br, item_rest, 0);
+    read_element_descriptor(descriptor_list[5], br, item_rest, 0);
 
-    read_element_descriptor(tablea_descriptor_list[6], br, item_rest, 0);
+    read_element_descriptor(descriptor_list[6], br, item_rest, 0);
 
     // table A has been loaded now.
 
     // remove first 7 elements from the descriptor list that have been used for table A.
-    tablea_descriptor_list.erase(tablea_descriptor_list.begin(), tablea_descriptor_list.begin() + 7);
+    descriptor_list.erase(descriptor_list.begin(), descriptor_list.begin() + 7);
 }

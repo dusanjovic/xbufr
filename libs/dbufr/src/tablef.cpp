@@ -131,8 +131,13 @@ void TableF::populate_code_flags_from_table(const std::string& table_name,
     int rc;
 
     for (const auto& entry : code_meaning) {
+
         const uint64_t fxy_and_code = entry.first;
         const std::string& current_meaning = entry.second;
+        if (!current_meaning.empty() && current_meaning != "NOT FOUND") {
+            continue;
+        }
+
         const FXY desc = FXY((uint16_t)(fxy_and_code >> 32U));
         const int code = fxy_and_code & 0x00000000FFFFFFFF;
 
@@ -141,10 +146,6 @@ void TableF::populate_code_flags_from_table(const std::string& table_name,
         std::ostringstream ostr;
         ostr << "SELECT fxy, mnemonic, code_flag, dep_fxy, dep_val, val, meaning FROM " << table_name;
         ostr << " WHERE fxy = \"" << desc.as_str() << "\" AND val = " << code;
-
-        if (!current_meaning.empty() && current_meaning != "NOT FOUND") {
-            continue;
-        }
 
         rc = sqlite3_prepare(m_db, ostr.str().c_str(), -1, &statement, nullptr);
         if (rc != SQLITE_OK) {

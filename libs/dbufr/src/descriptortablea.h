@@ -27,10 +27,4 @@ class DescriptorTableA : public Descriptor
 {
 public:
     DescriptorTableA(const int f, const int x, const int y, const std::string& entry, const std::string& description);
-
-    const std::string& entry() const;
-    void set_entry(const std::string& entry);
-
-private:
-    std::string m_entry;
 };

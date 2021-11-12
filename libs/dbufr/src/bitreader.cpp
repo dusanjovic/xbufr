@@ -34,7 +34,6 @@ BitReader::BitReader(const uint8_t* const data, const size_t len, const size_t o
     , offset(off)
     , debug(false)
 {
-    static_assert(CHAR_BIT == 8, "size of char type must be 8 bits (an octet).");
 }
 
 size_t BitReader::get_pos() const

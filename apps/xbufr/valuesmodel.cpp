@@ -81,7 +81,7 @@ QVariant ValuesModel::data(const QModelIndex& index, int role) const
         if (item.missing) {
             return QString("MISSING");
         }
-        assert(item.values.size() > 0);
+        assert(!item.values.empty());
         const Item::Value value = item.values[index.column()];
         if (value.type == Item::ValueType::Double) {
             QString unit(item.unit.c_str());

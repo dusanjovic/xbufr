@@ -190,7 +190,7 @@ BUFRFile::BUFRFile(const std::string& filename)
 
 BUFRFile::~BUFRFile() = default;
 
-BUFRMessage BUFRFile::get_message_num(const unsigned int message_num)
+BUFRMessage BUFRFile::get_message_num(const unsigned int message_num) const
 {
     // skip first few messages that contain bufr tables
     // const unsigned int actual_message_num = d->num_table_messages + message_num - 1;
@@ -277,7 +277,7 @@ bool BUFRFile::has_builtin_tables() const
     return d->has_builtin_tables;
 }
 
-void BUFRFile::dump_tables(std::ostream& ostr)
+void BUFRFile::dump_tables(std::ostream& ostr) const
 {
     d->tablea.dump(ostr);
     d->tabled.dump1(d->tablea, ostr);

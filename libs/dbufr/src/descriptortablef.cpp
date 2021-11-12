@@ -35,8 +35,3 @@ DescriptorTableF::DescriptorTableF(const std::string& s_fxy)
     : Descriptor(s_fxy)
 {
 }
-
-bool DescriptorTableF::has_deps() const
-{
-    return !m_deps.empty();
-}

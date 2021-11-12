@@ -194,7 +194,6 @@ void MainWindow::load_file(const QString& filename)
         return;
     }
 
-    int message_num_to_load = 1;
     try {
 
         bufrfile = new BUFRFile(filename.toStdString());
@@ -204,9 +203,8 @@ void MainWindow::load_file(const QString& filename)
             } else {
                 start_message = 1;
             }
-            message_num_to_load = start_message;
             end_message = bufrfile->num_messages();
-            load_message(message_num_to_load);
+            load_message(start_message);
         } else {
             throw std::runtime_error("There are 0 messages in a file");
         }

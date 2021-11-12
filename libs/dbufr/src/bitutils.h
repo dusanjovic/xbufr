@@ -27,7 +27,7 @@
 // 4 bytes conversion
 inline int C4INT(const unsigned char* buf)
 {
-    return (int)((buf[0] << 24) + (buf[1] << 16) + (buf[2] << 8) + buf[3]);
+    return (buf[0] << 24) + (buf[1] << 16) + (buf[2] << 8) + buf[3];
 }
 inline void INT4C(const int i, unsigned char* buf)
 {
@@ -40,11 +40,11 @@ inline void INT4C(const int i, unsigned char* buf)
 // 3 bytes conversion
 inline int C3INT(const unsigned char* buf)
 {
-    return (int)((buf[0] << 16) + (buf[1] << 8) + buf[2]);
+    return (buf[0] << 16) + (buf[1] << 8) + buf[2];
 }
 inline unsigned int C3UINT(const unsigned char* buf)
 {
-    return (unsigned int)((buf[0] << 16) + (buf[1] << 8) + buf[2]);
+    return (buf[0] << 16) + (buf[1] << 8) + buf[2];
 }
 inline void INT3C(const int i, unsigned char* buf)
 {
@@ -56,11 +56,11 @@ inline void INT3C(const int i, unsigned char* buf)
 // 2 bytes conversion
 inline int C2INT(const unsigned char* buf)
 {
-    return (int)((buf[0] << 8) + buf[1]);
+    return (buf[0] << 8) + buf[1];
 }
 inline unsigned int C2UINT(const unsigned char* buf)
 {
-    return (unsigned int)((buf[0] << 8) + buf[1]);
+    return (buf[0] << 8) + buf[1];
 }
 inline void INT2C(const int i, unsigned char* buf)
 {
@@ -88,7 +88,7 @@ inline void INT1C(const int i, unsigned char* buf)
 
 inline int INT2(const unsigned char a, const unsigned char b)
 {
-    return ((1 - (int)((unsigned)(a & 0x80) >> 6)) * (int)(((a & 127) << 8) + b));
+    return ((1 - (int)((unsigned)(a & 0x80) >> 6)) * ((a & 127) << 8) + b);
 }
 inline void INT2S(const int i, unsigned char* buf)
 {
@@ -99,7 +99,7 @@ inline void INT2S(const int i, unsigned char* buf)
 
 inline int INT3(const unsigned char a, const unsigned char b, const unsigned char c)
 {
-    return ((1 - (int)((unsigned)(a & 0x80) >> 6)) * (int)(((a & 127) << 16) + (b << 8) + c));
+    return ((1 - (int)((unsigned)(a & 0x80) >> 6)) * ((a & 127) << 16) + (b << 8) + c);
 }
 inline void INT3S(const int i, unsigned char* buf)
 {

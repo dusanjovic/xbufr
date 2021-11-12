@@ -33,7 +33,4 @@ public:
     DescriptorTableF(const int f, const int x, const int y);
     explicit DescriptorTableF(const int16_t fxy);
     explicit DescriptorTableF(const std::string& s_fxy);
-
-    bool has_deps() const;
-    std::vector<std::pair<std::string, std::string>> m_deps;
 };

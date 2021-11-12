@@ -25,18 +25,7 @@
 
 DescriptorTableA::DescriptorTableA(const int f, const int x, const int /* y */, const std::string& entry, const std::string& description)
     : Descriptor(f, x, string_to_int(entry))
-    , m_entry(entry)
 {
     set_mnemonic(description.substr(0, 8));
     m_description = description.substr(9, 55);
-}
-
-const std::string& DescriptorTableA::entry() const
-{
-    return m_entry;
-}
-
-void DescriptorTableA::set_entry(const std::string& entry)
-{
-    m_entry = entry;
 }

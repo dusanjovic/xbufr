@@ -33,7 +33,7 @@ public:
     explicit BUFRFile(const std::string& filename);
     virtual ~BUFRFile();
 
-    BUFRMessage get_message_num(const unsigned int message_num);
+    BUFRMessage get_message_num(const unsigned int message_num) const;
 
     unsigned int num_messages() const;
     unsigned int num_table_messages() const;
@@ -43,7 +43,7 @@ public:
     std::string get_tablef_name() const;
 
     bool has_builtin_tables() const;
-    void dump_tables(std::ostream& ostr);
+    void dump_tables(std::ostream& ostr) const;
 
 private:
     class PrivateData;

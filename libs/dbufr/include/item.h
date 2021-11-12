@@ -86,7 +86,7 @@ public:
         if (item.missing) {
             output << "MISSING ";
         } else {
-            if (item.values.size() > 0) {
+            if (!item.values.empty()) {
                 const Value value = item.values[0];
                 if (value.type == ValueType::Double) {
                     output << value.d << " ";
@@ -126,4 +126,4 @@ public:
     Type type{Type::Unknown};
 };
 
-typedef Node<Item> NodeItem;
+using NodeItem = Node<Item>;
