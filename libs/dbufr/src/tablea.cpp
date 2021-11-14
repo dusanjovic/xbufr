@@ -42,6 +42,8 @@ int TableA::get_decriptor(const FXY fxy, DescriptorTableA& desc) const
 
 void TableA::dump(std::ostream& ostr) const
 {
+    (void)m_tablea; // to prevent clang-tidy to convet this to static method
+
     ostr << ".------------------------------------------------------------------------------." << '\n';
     ostr << "| ------------   USER DEFINITIONS FOR TABLE-A TABLE-B TABLE D   -------------- |" << '\n';
     ostr << "|------------------------------------------------------------------------------|" << '\n';

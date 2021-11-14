@@ -95,14 +95,26 @@ private:
     BUFRDecoder& operator=(BUFRDecoder const&) = delete;
 
     uint8_t* m_buffer{nullptr};
-    size_t m_sec0_offset{0}, m_sec1_offset{0}, m_sec2_offset{0}, m_sec3_offset{0}, m_sec4_offset{0}, m_sec5_offset{0};
-    size_t m_sec0_length{0}, m_sec1_length{0}, m_sec2_length{0}, m_sec3_length{0}, m_sec4_length{0}, m_sec5_length{0};
+
+    size_t m_sec0_offset{0};
+    size_t m_sec1_offset{0};
+    size_t m_sec2_offset{0};
+    size_t m_sec3_offset{0};
+    size_t m_sec4_offset{0};
+    size_t m_sec5_offset{0};
+
+    size_t m_sec0_length{0};
+    size_t m_sec1_length{0};
+    size_t m_sec2_length{0};
+    size_t m_sec3_length{0};
+    size_t m_sec4_length{0};
+    size_t m_sec5_length{0};
 
     void parse_sections();
 
     void decode_section_0();
     void decode_section_1();
-    void decode_section_2();
+    void decode_section_2() const;
     void decode_section_3();
     void decode_section_5();
 
@@ -169,7 +181,8 @@ private:
     int get_next_bitmap_index();
     void read_next_bitmap_element(NodeItem* parent_nodeitem, BitReader& br, const int indent, bool bit_width_plus_one = false);
 
-    size_t m_start_pos{0}, m_end_pos{0};
+    size_t m_start_pos{0};
+    size_t m_end_pos{0};
 
     // Values data
     void count_data_values(NodeItem* ni);

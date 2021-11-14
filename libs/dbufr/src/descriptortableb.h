@@ -37,6 +37,11 @@ public:
                      int reference,
                      int bit_width);
 
+    DescriptorTableB(DescriptorTableB const&) = default;
+    DescriptorTableB(DescriptorTableB&&) noexcept = default;
+    DescriptorTableB& operator=(DescriptorTableB const&) = default;
+    DescriptorTableB& operator=(DescriptorTableB&&) noexcept = default;
+
     const std::string& unit() const;
     int scale() const;
     int reference() const;

@@ -27,5 +27,5 @@ DescriptorTableA::DescriptorTableA(const int f, const int x, const int /* y */, 
     : Descriptor(f, x, string_to_int(entry))
 {
     set_mnemonic(description.substr(0, 8));
-    m_description = description.substr(9, 55);
+    set_description(description.substr(9, 55));
 }

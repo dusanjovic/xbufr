@@ -170,13 +170,13 @@ void TableF::populate_code_flags_from_table(const std::string& table_name,
             if (rc == SQLITE_ROW) {
                 row++;
 
-                // const std::string fxy_string = (char*)sqlite3_column_text(statement, 0);
-                // const std::string mnemonic = (char*)sqlite3_column_text(statement, 1);
-                // const std::string code_flag = (char*)sqlite3_column_text(statement, 2);
-                const std::string dep_fxy = (char*)sqlite3_column_text(statement, 3);
-                const std::string dep_val = (char*)sqlite3_column_text(statement, 4);
+                // const std::string fxy_string = (const char*)sqlite3_column_text(statement, 0);
+                // const std::string mnemonic = (const char*)sqlite3_column_text(statement, 1);
+                // const std::string code_flag = (const char*)sqlite3_column_text(statement, 2);
+                const std::string dep_fxy = (const char*)sqlite3_column_text(statement, 3);
+                const std::string dep_val = (const char*)sqlite3_column_text(statement, 4);
                 const int val = sqlite3_column_int(statement, 5);
-                const std::string meaning = (char*)sqlite3_column_text(statement, 6);
+                const std::string meaning = (const char*)sqlite3_column_text(statement, 6);
 
                 (void)val;
                 assert(code == val);
@@ -252,13 +252,13 @@ std::string TableF::get_code_meaning_from_table(const std::string& table_name, c
         if (rc == SQLITE_ROW) {
             row++;
 
-            // const std::string fxy_string = (char*)sqlite3_column_text(statement, 0);
-            // const std::string mnemonic = (char*)sqlite3_column_text(statement, 1);
-            // const std::string code_flag = (char*)sqlite3_column_text(statement, 2);
-            const std::string dep_fxy = (char*)sqlite3_column_text(statement, 3);
-            const std::string dep_val = (char*)sqlite3_column_text(statement, 4);
+            // const std::string fxy_string = (const char*)sqlite3_column_text(statement, 0);
+            // const std::string mnemonic = (const char*)sqlite3_column_text(statement, 1);
+            // const std::string code_flag = (const char*)sqlite3_column_text(statement, 2);
+            const std::string dep_fxy = (const char*)sqlite3_column_text(statement, 3);
+            const std::string dep_val = (const char*)sqlite3_column_text(statement, 4);
             const int val = sqlite3_column_int(statement, 5);
-            const std::string meaning = (char*)sqlite3_column_text(statement, 6);
+            const std::string meaning = (const char*)sqlite3_column_text(statement, 6);
 
             (void)val;
             assert(code == val);
@@ -400,7 +400,8 @@ bool TableF::read_from_file_ncep(sqlite3* db,
             std::string sequence_line;
             std::getline(ifile, sequence_line);
 
-            std::vector<std::string> sequence_parts, name_parts;
+            std::vector<std::string> sequence_parts;
+            std::vector<std::string> name_parts;
             split(sequence_line, '|', sequence_parts);
             split(sequence_parts[1], ';', name_parts);
 
@@ -501,7 +502,7 @@ bool TableF::read_from_file_eccodes(sqlite3* db, const bool is_master, const std
     }
 
     if (auto* dir = opendir(fname.c_str())) {
-        while (auto* f = readdir(dir)) {
+        while (auto const* f = readdir(dir)) {
             if (f->d_name[0] == '.') {
                 continue;
             }

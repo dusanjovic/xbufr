@@ -34,6 +34,10 @@ public:
     explicit Descriptor(const FXY fxy);
     explicit Descriptor(const std::string& s_fxy);
     virtual ~Descriptor() = default;
+    Descriptor(Descriptor const&) = default;
+    Descriptor(Descriptor&&) noexcept = default;
+    Descriptor& operator=(Descriptor const&) = default;
+    Descriptor& operator=(Descriptor&&) noexcept = default;
 
     FXY fxy() const;
 
@@ -43,7 +47,7 @@ public:
     void set_description(const std::string& description);
     const std::string& description() const;
 
-protected:
+private:
     FXY m_fxy{0};
     std::string m_mnemonic;
     std::string m_description;

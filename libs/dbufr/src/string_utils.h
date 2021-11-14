@@ -36,11 +36,7 @@
 
 class BadConversion : public std::runtime_error
 {
-public:
-    explicit BadConversion(std::string const& s)
-        : std::runtime_error(s)
-    {
-    }
+    using std::runtime_error::runtime_error;
 };
 
 inline double string_to_double(std::string const& s)
@@ -72,8 +68,8 @@ inline std::string int_to_bitstring(const int i, const int bits)
 static inline std::string to_escaped(std::string const& s)
 {
     std::string out;
-    for (std::string::const_iterator i = s.begin(); i != s.end(); ++i) {
-        unsigned char c = *i;
+    for (auto i = s.begin(); i != s.end(); ++i) {
+        auto c = *i;
         switch (c) {
         case '\'':
             out += "\'\'";
@@ -207,7 +203,7 @@ static bool both_are_spaces(char lhs, char rhs)
 static inline std::string collapse_spaces(std::string const& str)
 {
     std::string s = str;
-    std::string::iterator new_end = std::unique(s.begin(), s.end(), both_are_spaces);
+    auto new_end = std::unique(s.begin(), s.end(), both_are_spaces);
     s.erase(new_end, s.end());
     return s;
 }

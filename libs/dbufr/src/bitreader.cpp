@@ -23,6 +23,7 @@
 
 #include "fmt/format.h"
 
+#include <array>
 #include <climits>
 #include <iostream>
 #include <stdexcept>
@@ -82,7 +83,7 @@ unsigned int BitReader::get_int(const unsigned int bits)
         throw std::runtime_error(fmt::format("BitReader::get_int can not go past the end of the buffer. cursor_position: {} bits: {} length: {}", bit_pos, bits, length));
     }
 
-    static const unsigned int bitmask[] = {
+    static const std::array<unsigned int, 33> bitmask = {
         0x00000000U,
         0x00000001U,
         0x00000003U,
@@ -176,7 +177,7 @@ std::string BitReader::get_string(const unsigned int bits)
     const size_t octet = bit_pos >> 3UL;    // Which octet the word starts in, faster than 'bit_pos / 8'
     const size_t lshift = bit_pos & 0x07UL; // Offset from start of octet to start of word, faster than 'bit_pos % 8'
     const size_t len = bits >> 3UL;         // faster than 'bits / 8';
-    auto* str = new unsigned char[len + 1];
+    auto str = std::vector<unsigned char>(len + 1);
 
     if (lshift == 0) {
         for (size_t i = 0; i < len; i++) {
@@ -196,12 +197,10 @@ std::string BitReader::get_string(const unsigned int bits)
 
     for (size_t i = 0; i < len; i++) {
         if (str[i] != 0xff) {
-            std::string s(reinterpret_cast<const char*>(str), len);
-            delete[] str;
+            std::string s(str.begin(), str.end() - 1);
             return s;
         }
     }
-    delete[] str;
     // all bits in all octets are 1. it's a missing string
     return std::string("MISSING");
 }

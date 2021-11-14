@@ -22,6 +22,7 @@
 #include "bufrutil.h"
 #include "bitutils.h"
 
+#include <array>
 #include <fstream>
 #include <iostream>
 #include <sstream>
@@ -29,8 +30,8 @@
 
 std::ios::pos_type seek_bufr(std::ifstream& file, const std::ios::pos_type start_pos, size_t& len_bufr)
 {
-    unsigned char buffer[4];
-    unsigned char buf7777[4];
+    std::array<unsigned char, 4> buffer{};
+    std::array<unsigned char, 4> buf7777{};
 
     // look for "BUFR" in the first 1024 bytes starting at start_pos
 
@@ -44,11 +45,11 @@ std::ios::pos_type seek_bufr(std::ifstream& file, const std::ios::pos_type start
     while (!file.eof() && pos < start_pos + (std::ios::off_type)1024 && pos < file_size - (std::ios::off_type)4) {
 
         file.seekg(pos, std::ios::beg);
-        file.read((char*)buffer, 4);
+        file.read((char*)&buffer, 4);
 
         if (buffer[0] == 'B' && buffer[1] == 'U' && buffer[2] == 'F' && buffer[3] == 'R') {
 
-            file.read((char*)buffer, 4);
+            file.read((char*)&buffer, 4);
             if ((int)buffer[3] == 2 || (int)buffer[3] == 3 || (int)buffer[3] == 4) {
 
                 len_bufr = C3UINT(buffer);
@@ -61,7 +62,7 @@ std::ios::pos_type seek_bufr(std::ifstream& file, const std::ios::pos_type start
 
                 if (pos + (std::ios::pos_type)len_bufr <= file_size) {
                     file.seekg(pos + (std::ios::pos_type)(len_bufr - 4));
-                    file.read((char*)buf7777, 4);
+                    file.read((char*)&buf7777, 4);
                     if (buf7777[0] == '7' && buf7777[1] == '7' && buf7777[2] == '7' && buf7777[3] == '7') {
                         return pos;
                     }

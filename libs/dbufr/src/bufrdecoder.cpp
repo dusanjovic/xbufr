@@ -269,7 +269,7 @@ void BUFRDecoder::dump_section_1(std::ostream& ostr) const
     ostr << '\n';
 }
 
-void BUFRDecoder::decode_section_2()
+void BUFRDecoder::decode_section_2() const
 {
     if (m_sec2_length == 0) {
         return;
@@ -1257,13 +1257,11 @@ void BUFRDecoder::read_sequence_descriptor(const FXY fxy,
             throw std::runtime_error("didn't find iterator 1_01_000");
         }
 
-        {
-            Item& rep_item = descriptor_nodeitem->add_child()->data();
-            rep_item.fxy = FXY(f_next, x_next, y_next).as_int();
-            rep_item.name = FXY(f_next, x_next, y_next).as_str();
-            rep_item.type = Item::Type::Replicator;
-            rep_item.description = fmt::format("delayed replication operator {} descriptors replicated ...", x_next);
-        }
+        Item& iterator_item = descriptor_nodeitem->add_child()->data();
+        iterator_item.fxy = FXY(f_next, x_next, y_next).as_int();
+        iterator_item.name = FXY(f_next, x_next, y_next).as_str();
+        iterator_item.type = Item::Type::Replicator;
+        iterator_item.description = fmt::format("delayed replication operator {} descriptors replicated ...", x_next);
 
         desc++; // this next descriptor should be 0_31_YYY
         descriptor_list[desc].fxy(f_next, x_next, y_next);
@@ -1272,22 +1270,20 @@ void BUFRDecoder::read_sequence_descriptor(const FXY fxy,
             throw std::runtime_error("didn't find delayed replicator 0_31_YYY");
         }
 
-        {
-            Item& rep_item = descriptor_nodeitem->add_child()->data();
-            rep_item.name = FXY(f_next, x_next, y_next).as_str();
-            rep_item.type = Item::Type::Replicator;
-            rep_item.bits_range_start = br.get_pos();
-            if (y_next == 1) {
-                nchild = br.get_int(8);
-                rep_item.description = fmt::format("delayed (8-bit delay) replication operator {} descriptors replicated {} times", 1, nchild);
-            } else if (y_next == 2) {
-                nchild = br.get_int(16);
-                rep_item.description = fmt::format("delayed (16-bit delay) replication operator {} descriptors replicated {} times", 1, nchild);
-            } else {
-                throw std::runtime_error("didn't find delayed replicator 0_31_YYY YYY=1 or YYY=2");
-            }
-            rep_item.bits_range_end = br.get_pos() - 1;
+        Item& rep_item = descriptor_nodeitem->add_child()->data();
+        rep_item.name = FXY(f_next, x_next, y_next).as_str();
+        rep_item.type = Item::Type::Replicator;
+        rep_item.bits_range_start = br.get_pos();
+        if (y_next == 1) {
+            nchild = br.get_int(8);
+            rep_item.description = fmt::format("delayed (8-bit delay) replication operator {} descriptors replicated {} times", 1, nchild);
+        } else if (y_next == 2) {
+            nchild = br.get_int(16);
+            rep_item.description = fmt::format("delayed (16-bit delay) replication operator {} descriptors replicated {} times", 1, nchild);
+        } else {
+            throw std::runtime_error("didn't find delayed replicator 0_31_YYY YYY=1 or YYY=2");
         }
+        rep_item.bits_range_end = br.get_pos() - 1;
 
         desc++; // this next descriptor should be 0_00_030
         descriptor_list[desc].fxy(f_next, x_next, y_next);
@@ -1379,7 +1375,7 @@ void BUFRDecoder::read_sequence_descriptor(const FXY fxy,
 
         if (niter > 0) {
             std::vector<FXY> iter_list;
-            iter_list.push_back(descriptor_list[static_cast<size_t>(desc) + 1]);
+            iter_list.push_back(descriptor_list[desc + 1]);
 
             if (m_flag_compressed) {
                 const unsigned int bits = br.get_int(6);
@@ -1589,7 +1585,7 @@ void BUFRDecoder::update_data_values(NodeItem* ni, std::vector<std::vector<const
 int BUFRDecoder::load_tables()
 {
     if (m_data_cat == 11) {
-        unsigned char* sec4 = m_buffer + m_sec4_offset;
+        const unsigned char* sec4 = m_buffer + m_sec4_offset;
         BitReader br(sec4 + 4, (m_sec4_length - 4) * 8, (m_sec4_offset + 4) * 8);
         if (m_number_of_data_subsets > 0) {
             if (m_originating_center == 7) {
@@ -1623,8 +1619,9 @@ void BUFRDecoder::read_table_a_ncep(std::vector<FXY>& descriptor_list, BitReader
 
     // this is specific to NCEP
 
-    int f, x, y;
-
+    int f;
+    int x;
+    int y;
     int desc_idx;
 
     desc_idx = 0;
@@ -1703,8 +1700,9 @@ void BUFRDecoder::read_table_a_ecmwf(std::vector<FXY>& descriptor_list, BitReade
     // 00_00_008
     // ....
 
-    int f, x, y;
-
+    int f;
+    int x;
+    int y;
     int desc_idx;
 
     desc_idx = 0;

@@ -151,7 +151,6 @@ void TableD::dump2(const TableB& tb, std::ostream& ostr) const
             parent_str << std::setfill(' ') << "| " << std::setw(8) << d_desc.mnemonic() << " |";
             std::string parent = parent_str.str();
 
-            std::string prefix, suffix;
             std::vector<Descriptor> seq = d_desc.sequence();
 
             std::string children_line;
@@ -159,8 +158,13 @@ void TableD::dump2(const TableB& tb, std::ostream& ostr) const
             for (size_t child = 0; child < seq.size(); child++) {
 
                 FXY child_fxy = seq[child].fxy();
-                int cf, cx, cy;
+                int cf;
+                int cx;
+                int cy;
                 child_fxy.fxy(cf, cx, cy);
+
+                std::string prefix;
+                std::string suffix;
 
                 // define replication tags
                 if (cf == 3 && cx == 60 && cy == 1) { // DRP16BIT
@@ -315,11 +319,11 @@ bool TableD::load_table(sqlite3* db, const bool is_master)
 
         if (rc == SQLITE_ROW) {
 
-            std::string fxy = (char*)sqlite3_column_text(statement, 0);
-            std::string mnemonic = (char*)sqlite3_column_text(statement, 1);
-            std::string name = (char*)sqlite3_column_text(statement, 2);
+            std::string fxy = (const char*)sqlite3_column_text(statement, 0);
+            std::string mnemonic = (const char*)sqlite3_column_text(statement, 1);
+            std::string name = (const char*)sqlite3_column_text(statement, 2);
             unsigned int nchild = sqlite3_column_int(statement, 3);
-            std::string childrens = (char*)sqlite3_column_text(statement, 4);
+            std::string childrens = (const char*)sqlite3_column_text(statement, 4);
 
             std::vector<std::string> sub_descriptors;
             split(childrens, ',', sub_descriptors);
@@ -549,7 +553,8 @@ bool TableD::read_from_file_ncep(sqlite3* db,
             std::string sequence_line;
             std::getline(ifile, sequence_line);
 
-            std::vector<std::string> sequence_parts, name_parts;
+            std::vector<std::string> sequence_parts;
+            std::vector<std::string> name_parts;
             split(sequence_line, '|', sequence_parts);
             split(sequence_parts[1], ';', name_parts);
 

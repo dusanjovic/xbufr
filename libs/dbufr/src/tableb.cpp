@@ -70,13 +70,17 @@ void TableB::add_descriptor(const DescriptorTableB& desc)
     if (!exists_decriptor(fxy)) {
         m_insertion_order.push_back(fxy);
     }
+#ifdef USE_VECTOR
+    m_tableb[fxy.as_int()] = desc;
+#else
     m_tableb[fxy] = desc;
+#endif
 }
 
 const DescriptorTableB& TableB::get_decriptor(const FXY fxy) const
 {
 #ifdef USE_VECTOR
-    return m_tableb[fxy];
+    return m_tableb[fxy.as_int()];
 #else
     auto it = m_tableb.find(fxy);
     if (it != m_tableb.end()) {
@@ -89,8 +93,8 @@ const DescriptorTableB& TableB::get_decriptor(const FXY fxy) const
 bool TableB::search_decriptor(const FXY fxy, DescriptorTableB& desc) const
 {
 #ifdef USE_VECTOR
-    desc = m_tableb[fxy];
-    return desc.fxy() == 0 ? false : true;
+    desc = m_tableb[fxy.as_int()];
+    return desc.fxy().as_int() != 0;
 #else
     auto it = m_tableb.find(fxy);
     if (it != m_tableb.end()) {
@@ -104,8 +108,8 @@ bool TableB::search_decriptor(const FXY fxy, DescriptorTableB& desc) const
 bool TableB::exists_decriptor(const FXY fxy) const
 {
 #ifdef USE_VECTOR
-    const DescriptorTableB& desc = m_tableb[fxy];
-    return desc.fxy() == 0 ? false : true;
+    const DescriptorTableB& desc = m_tableb[fxy.as_int()];
+    return desc.fxy().as_int() != 0;
 #else
     auto it = m_tableb.find(fxy);
     return it != m_tableb.end();
@@ -116,7 +120,11 @@ void TableB::dump1(std::ostream& ostr)
 {
     ostr << "|          |        |                                                          |" << '\n';
     for (const auto& i : m_insertion_order) {
+#ifdef USE_VECTOR
+        const DescriptorTableB& desc = m_tableb[i.as_int()];
+#else
         const DescriptorTableB& desc = m_tableb[i];
+#endif
         const int x = desc.fxy().x();
         if (!(x == 0 || x == 63 || x == 31)) {
             ostr << "| " << std::setw(8) << desc.mnemonic()
@@ -137,7 +145,11 @@ void TableB::dump2(std::ostream& ostr)
     ostr << "|          |      |             |     |                          |-------------|" << '\n';
 
     for (const auto& i : m_insertion_order) {
+#ifdef USE_VECTOR
+        const DescriptorTableB& desc = m_tableb[i.as_int()];
+#else
         const DescriptorTableB& desc = m_tableb[i];
+#endif
         const int x = desc.fxy().x();
         if (!(x == 0 || x == 63 || x == 31)) {
             ostr << std::right << std::setfill(' ') << "| " << std::setw(8) << desc.mnemonic()
@@ -256,10 +268,10 @@ bool TableB::load_table(sqlite3* db, bool is_master)
 
         if (rc == SQLITE_ROW) {
 
-            const std::string fxy = (char*)sqlite3_column_text(statement, 0);
-            const std::string mnemonic = (char*)sqlite3_column_text(statement, 1);
-            const std::string name = (char*)sqlite3_column_text(statement, 2);
-            const std::string unit = (char*)sqlite3_column_text(statement, 3);
+            const std::string fxy = (const char*)sqlite3_column_text(statement, 0);
+            const std::string mnemonic = (const char*)sqlite3_column_text(statement, 1);
+            const std::string name = (const char*)sqlite3_column_text(statement, 2);
+            const std::string unit = (const char*)sqlite3_column_text(statement, 3);
             const int scale = sqlite3_column_int(statement, 4);
             const int reference = sqlite3_column_int(statement, 5);
             const int bits = sqlite3_column_int(statement, 6);

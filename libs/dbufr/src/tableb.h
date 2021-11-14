@@ -27,7 +27,7 @@
 #include <map>
 #include <vector>
 
-//#define USE_VECTOR
+#define USE_VECTOR
 
 class TableB
 {

@@ -27,4 +27,9 @@ class DescriptorTableA : public Descriptor
 {
 public:
     DescriptorTableA(const int f, const int x, const int y, const std::string& entry, const std::string& description);
+
+    DescriptorTableA(DescriptorTableA const&) = default;
+    DescriptorTableA(DescriptorTableA&&) noexcept = default;
+    DescriptorTableA& operator=(DescriptorTableA const&) = default;
+    DescriptorTableA& operator=(DescriptorTableA&&) noexcept = default;
 };

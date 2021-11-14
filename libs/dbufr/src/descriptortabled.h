@@ -33,6 +33,11 @@ public:
     explicit DescriptorTableD(const FXY fxy);
     explicit DescriptorTableD(const std::string& s_fxy);
 
+    DescriptorTableD(DescriptorTableD const&) = default;
+    DescriptorTableD(DescriptorTableD&&) noexcept = default;
+    DescriptorTableD& operator=(DescriptorTableD const&) = default;
+    DescriptorTableD& operator=(DescriptorTableD&&) noexcept = default;
+
     const std::vector<Descriptor>& sequence() const;
     void add_child(const Descriptor& d);
 
