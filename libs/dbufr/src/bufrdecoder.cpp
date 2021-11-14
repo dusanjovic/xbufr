@@ -686,6 +686,17 @@ void BUFRDecoder::read_element_descriptor(const FXY fxy,
             value.d = new_ref;
             item.values.emplace_back(std::move(value));
 
+            // add/repeat (m_number_of_data_subsets-1) values of new_ref, just to have the same
+            // number of elements in item.values of this row, as in actual data rows
+            if (m_flag_compressed && m_number_of_data_subsets > 0) { // compressed, multiple values
+                for (unsigned int n = 1; n < m_number_of_data_subsets; n++) {
+                    Item::Value value_additional;
+                    value_additional.type = Item::ValueType::Double;
+                    value_additional.d = new_ref;
+                    item.values.emplace_back(std::move(value_additional));
+                }
+            }
+
             return; // RETURN RETURN
         }
 
