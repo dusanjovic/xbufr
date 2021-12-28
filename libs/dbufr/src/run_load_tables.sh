@@ -26,7 +26,7 @@ done
 #
 # ecCodes
 #
-for v in 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36
+for v in 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37
 do
  echo "ECCODES $v ================="
  ./load_tables eccodes 0 $v 0 0 0 $MASTER
@@ -38,6 +38,7 @@ done
  ./load_tables eccodes 0 0  78 0   2 $LOCAL
  ./load_tables eccodes 0 0  98 0   3 $LOCAL
  ./load_tables eccodes 0 0  78 0   3 $LOCAL
+ ./load_tables eccodes 0 0  98 0   4 $LOCAL
  ./load_tables eccodes 0 0  98 0 101 $LOCAL
 
 rm -rf tables
