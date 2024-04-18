@@ -100,14 +100,14 @@ int main(int argc, char* argv[])
                 m.get_values_for_subset(values_data_nodes, j);
             }
             dump_data(&message_nodeitem, std::cout);
-            std::cout << "+++++++++" << std::endl;
+            std::cout << "+++++++++" << '\n';
         }
 
     } catch (const std::exception& e) {
-        std::cerr << e.what() << std::endl;
+        std::cerr << e.what() << '\n';
         return -1;
     } catch (...) {
-        std::cerr << "exception" << std::endl;
+        std::cerr << "exception" << '\n';
         return -1;
     }
     return 0;

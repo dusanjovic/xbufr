@@ -208,7 +208,7 @@ void TableF::populate_code_flags_from_table(const std::string& table_name,
             }
 
             if (rc == SQLITE_ERROR) {
-                std::cerr << "SQL error:  sqlite3_step " << std::endl;
+                std::cerr << "SQL error:  sqlite3_step " << '\n';
             }
         } // while (true)
 
@@ -279,7 +279,7 @@ std::string TableF::get_code_meaning_from_table(const std::string& table_name, c
         }
 
         if (rc == SQLITE_ERROR) {
-            std::cerr << "SQL error:  sqlite3_step " << std::endl;
+            std::cerr << "SQL error:  sqlite3_step " << '\n';
         }
     } // while (true)
 
@@ -309,8 +309,8 @@ void TableF::create_table(sqlite3* db, const std::string& table_name)
 
     int rc = sqlite3_exec(db, ostr.str().c_str(), nullptr, nullptr, nullptr);
     if (rc != SQLITE_OK) {
-        std::cerr << "SQL error: sqlite3_exec " << rc << " " << sqlite3_errmsg(db) << std::endl;
-        std::cerr << ostr.str() << std::endl;
+        std::cerr << "SQL error: sqlite3_exec " << rc << " " << sqlite3_errmsg(db) << '\n';
+        std::cerr << ostr.str() << '\n';
         exit(1);
     }
 }
@@ -346,8 +346,8 @@ void TableF::insert_row(sqlite3* db,
     int rc = sqlite3_exec(db, sqls.str().c_str(), nullptr, nullptr, nullptr);
     if (rc != SQLITE_OK) {
         std::ostringstream estr;
-        estr << "SQL error: sqlite3_exec " << rc << " " << sqlite3_errmsg(db) << std::endl;
-        estr << sqls.str() << std::endl;
+        estr << "SQL error: sqlite3_exec " << rc << " " << sqlite3_errmsg(db) << '\n';
+        estr << sqls.str() << '\n';
         throw std::runtime_error(estr.str());
     }
 }
@@ -370,7 +370,7 @@ bool TableF::read_from_file_ncep(sqlite3* db,
 
     rc = sqlite3_exec(db, "BEGIN TRANSACTION;", nullptr, nullptr, nullptr);
     if (rc != SQLITE_OK) {
-        std::cerr << "SQL error: sqlite3_exec " << rc << " " << sqlite3_errmsg(db) << std::endl;
+        std::cerr << "SQL error: sqlite3_exec " << rc << " " << sqlite3_errmsg(db) << '\n';
         return false;
     }
 
@@ -472,7 +472,7 @@ bool TableF::read_from_file_ncep(sqlite3* db,
 
     rc = sqlite3_exec(db, "END TRANSACTION;", nullptr, nullptr, nullptr);
     if (rc != SQLITE_OK) {
-        std::cerr << "SQL error: sqlite3_exec " << rc << " " << sqlite3_errmsg(db) << std::endl;
+        std::cerr << "SQL error: sqlite3_exec " << rc << " " << sqlite3_errmsg(db) << '\n';
         return false;
     }
 
@@ -497,7 +497,7 @@ bool TableF::read_from_file_eccodes(sqlite3* db, const bool is_master, const std
 
     rc = sqlite3_exec(db, "BEGIN TRANSACTION;", nullptr, nullptr, nullptr);
     if (rc != SQLITE_OK) {
-        std::cerr << "SQL error: sqlite3_exec " << rc << " " << sqlite3_errmsg(db) << std::endl;
+        std::cerr << "SQL error: sqlite3_exec " << rc << " " << sqlite3_errmsg(db) << '\n';
         return false;
     }
 
@@ -542,7 +542,7 @@ bool TableF::read_from_file_eccodes(sqlite3* db, const bool is_master, const std
 
     rc = sqlite3_exec(db, "END TRANSACTION;", nullptr, nullptr, nullptr);
     if (rc != SQLITE_OK) {
-        std::cerr << "SQL error: sqlite3_exec " << rc << " " << sqlite3_errmsg(db) << std::endl;
+        std::cerr << "SQL error: sqlite3_exec " << rc << " " << sqlite3_errmsg(db) << '\n';
         return false;
     }
 #endif

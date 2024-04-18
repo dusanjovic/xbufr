@@ -322,8 +322,8 @@ void TableB::create_table(sqlite3* db, const std::string& table_name)
 
     rc = sqlite3_exec(db, ostr.str().c_str(), nullptr, nullptr, nullptr);
     if (rc != SQLITE_OK) {
-        std::cerr << "SQL error: sqlite3_exec " << rc << " " << sqlite3_errmsg(db) << std::endl;
-        std::cerr << ostr.str() << std::endl;
+        std::cerr << "SQL error: sqlite3_exec " << rc << " " << sqlite3_errmsg(db) << '\n';
+        std::cerr << ostr.str() << '\n';
         exit(1);
     }
 }
@@ -429,7 +429,7 @@ bool TableB::read_from_file_eccodes(sqlite3* db,
 
     rc = sqlite3_exec(db, "BEGIN TRANSACTION;", nullptr, nullptr, nullptr);
     if (rc != SQLITE_OK) {
-        std::cerr << "SQL error: sqlite3_exec " << rc << " " << sqlite3_errmsg(db) << std::endl;
+        std::cerr << "SQL error: sqlite3_exec " << rc << " " << sqlite3_errmsg(db) << '\n';
         return false;
     }
 

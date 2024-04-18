@@ -95,7 +95,7 @@ MainWindow::MainWindow(QWidget* parent)
 
 #if defined(Q_OS_LINUX) && defined(QT_NO_FONTCONFIG)
     if (QFontDatabase::addApplicationFont(":/fonts/MyFont-subset.ttf") == -1) {
-        std::cerr << "Error loading Font" << std::endl;
+        std::cerr << "Error loading Font" << '\n';
     } else {
         QFont f("DejaVu Sans", 10);
         // force full hinting (when we compile (staticaly) without full fontconfig support)
@@ -103,7 +103,7 @@ MainWindow::MainWindow(QWidget* parent)
         QApplication::setFont(f);
     }
     if (QFontDatabase::addApplicationFont(":/fonts/MyFontMono-subset.ttf") == -1) {
-        std::cerr << "Error loading FontMono" << std::endl;
+        std::cerr << "Error loading FontMono" << '\n';
     }
     ui->treeView->setFont(QFont("DejaVu Sans Mono", 10));
     ui->tableView->setFont(QFont("DejaVu Sans Mono", 10));

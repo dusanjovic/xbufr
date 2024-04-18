@@ -28,7 +28,7 @@
 int main(int argc, char* argv[])
 {
     if (argc != 8) {
-        std::cerr << " argc != 8 " << std::endl;
+        std::cerr << " argc != 8 " << '\n';
         return 1;
     }
 
@@ -70,7 +70,7 @@ int main(int argc, char* argv[])
 
     rc = sqlite3_open_v2(dbfile.c_str(), &db, SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE, nullptr);
     if (rc != SQLITE_OK) {
-        std::cerr << "Can't open database: " << sqlite3_errmsg(db) << std::endl;
+        std::cerr << "Can't open database: " << sqlite3_errmsg(db) << '\n';
         exit(1);
     }
 

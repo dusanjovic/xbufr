@@ -39,10 +39,10 @@ int main(int argc, char* argv[])
             std::cout << argv[1] << " is not NCEP bufr file" << '\n';
         }
     } catch (const std::exception& e) {
-        std::cerr << e.what() << std::endl;
+        std::cerr << e.what() << '\n';
         return -1;
     } catch (...) {
-        std::cerr << "exception" << std::endl;
+        std::cerr << "exception" << '\n';
         return -1;
     }
     return 0;
