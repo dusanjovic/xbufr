@@ -48,13 +48,13 @@ QVariant ValuesModel::headerData(int section, Qt::Orientation orientation, int r
         if (role == Qt::ToolTipRole) {
             return QString(item.description.c_str());
         }
-        return QVariant();
+        return {};
     }
 
     if (role == Qt::DisplayRole) {
         return QString::number(section + 1);
     }
-    return QVariant();
+    return {};
 }
 
 int ValuesModel::rowCount(const QModelIndex& /*parent*/) const
@@ -73,7 +73,7 @@ int ValuesModel::columnCount(const QModelIndex& /*parent*/) const
 QVariant ValuesModel::data(const QModelIndex& index, int role) const
 {
     if (!index.isValid()) {
-        return QVariant();
+        return {};
     }
 
     if (role == Qt::DisplayRole) {
@@ -98,7 +98,7 @@ QVariant ValuesModel::data(const QModelIndex& index, int role) const
         return QVariant::fromValue(ni);
     }
 
-    return QVariant();
+    return {};
 }
 
 std::vector<std::vector<const NodeItem*>>& ValuesModel::data_nodes()

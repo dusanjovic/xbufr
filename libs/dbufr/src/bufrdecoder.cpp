@@ -298,7 +298,7 @@ void BUFRDecoder::decode_section_3()
     m_num_data_descriptors = (unsigned int)(m_sec3_length - 7) / 2;
     m_data_descriptor_list.clear();
     for (unsigned int i = 0; i < m_num_data_descriptors; i++) {
-        m_data_descriptor_list.emplace_back(FXY(C2SHORT(sec3 + 7 + 2 * i)));
+        m_data_descriptor_list.emplace_back(C2SHORT(sec3 + 7 + 2 * i));
     }
 }
 
@@ -858,7 +858,7 @@ void BUFRDecoder::read_replication_descriptor(const FXY fxy,
         item_next.type = Item::Type::Replicator;
         item_next.bits_range_start = br.get_pos();
 
-        if (!(f_next == 0 && x_next == 31)) {
+        if (f_next != 0 || x_next != 31) {
             throw std::runtime_error("the descriptor after the delayed replication operator is not 0 31 YYY");
         }
 

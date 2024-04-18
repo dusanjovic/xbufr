@@ -38,10 +38,10 @@
 
 TableD::TableD()
 {
-    m_tdskip.emplace_back(FXY(3, 60, 1)); // DRP16BIT
-    m_tdskip.emplace_back(FXY(3, 60, 2)); // DRP8BIT
-    m_tdskip.emplace_back(FXY(3, 60, 3)); // DRPSTAK
-    m_tdskip.emplace_back(FXY(3, 60, 4)); // DRP1BIT
+    m_tdskip.emplace_back(3, 60, 1); // DRP16BIT
+    m_tdskip.emplace_back(3, 60, 2); // DRP8BIT
+    m_tdskip.emplace_back(3, 60, 3); // DRPSTAK
+    m_tdskip.emplace_back(3, 60, 4); // DRP1BIT
 }
 
 void TableD::set_versions(const int master_table_number,

@@ -126,7 +126,7 @@ void TableB::dump1(std::ostream& ostr)
         const DescriptorTableB& desc = m_tableb[i];
 #endif
         const int x = desc.fxy().x();
-        if (!(x == 0 || x == 63 || x == 31)) {
+        if (x != 0 && x != 63 && x != 31) {
             ostr << "| " << std::setw(8) << desc.mnemonic()
                  << " | " << desc.fxy().as_str()
                  << " | " << std::setw(55) << desc.description()
@@ -151,7 +151,7 @@ void TableB::dump2(std::ostream& ostr)
         const DescriptorTableB& desc = m_tableb[i];
 #endif
         const int x = desc.fxy().x();
-        if (!(x == 0 || x == 63 || x == 31)) {
+        if (x != 0 && x != 63 && x != 31) {
             ostr << std::right << std::setfill(' ') << "| " << std::setw(8) << desc.mnemonic()
                  << " | " << std::setw(4) << desc.scale()
                  << " | " << std::setw(11) << desc.reference()
@@ -383,7 +383,7 @@ void TableB::insert_row(sqlite3* db,
         const int iscale = string_to_int(scale);
         const int irefval = string_to_int(refval);
         const int ibits = string_to_int(bits);
-        if (!(existing_desc.scale() == iscale && existing_desc.reference() == irefval && existing_desc.bit_width() == ibits)) {
+        if (existing_desc.scale() != iscale || existing_desc.reference() != irefval || existing_desc.bit_width() != ibits) {
             std::cout << "Warning: replace b descriptor " << fxy_string << " " << trim(name) << " ";
             std::cout << trim(scale) << " " << trim(refval) << " " << trim(bits) << " ";
             std::cout << existing_desc.scale() << " " << existing_desc.reference() << " " << existing_desc.bit_width() << '\n';

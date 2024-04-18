@@ -96,7 +96,7 @@ QVariant NodeModel::data(const QModelIndex& index, int role) const
 {
     const NodeItem* node = node_from_index(index);
     if (node == nullptr) {
-        return QVariant();
+        return {};
     }
 
     if (role == Qt::DisplayRole) {
@@ -261,7 +261,7 @@ QVariant NodeModel::data(const QModelIndex& index, int role) const
         }
     }
 
-    return QVariant();
+    return {};
 }
 
 QVariant NodeModel::headerData(int column,
@@ -308,7 +308,7 @@ QVariant NodeModel::headerData(int column,
         return Qt::AlignLeft;
     }
 
-    return QVariant();
+    return {};
 }
 
 QModelIndex NodeModel::index_from_node(const NodeItem* ni) const
