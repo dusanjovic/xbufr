@@ -33,7 +33,7 @@ int main(int argc, char* argv[])
 
     qputenv("QT_QPA_FONTDIR", ".");
 
-    MyApplication app(argc, argv);
+    const MyApplication app(argc, argv);
 
 #ifdef Q_OS_WIN
     app.setStyle(QStyleFactory::create("Fusion"));

@@ -64,7 +64,7 @@ static void collapseChildren(const QModelIndex& index, QTreeView* view)
         view->collapse(index);
     }
 
-    int childCount = index.model()->rowCount(index);
+    const int childCount = index.model()->rowCount(index);
     for (int i = 0; i < childCount; i++) {
         const QModelIndex& child = index.model()->index(i, 0, index);
         collapseChildren(child, view);
@@ -114,7 +114,7 @@ MainWindow::MainWindow(QWidget* parent)
     QFont fixed_font = QFont("Consolas");
     fixed_font.setPointSize(10);
 #else
-    int pt = QFontDatabase::systemFont(QFontDatabase::GeneralFont).pointSize();
+    const int pt = QFontDatabase::systemFont(QFontDatabase::GeneralFont).pointSize();
     QFont fixed_font = QFontDatabase::systemFont(QFontDatabase::FixedFont);
     fixed_font.setPointSize(pt);
 #endif
@@ -169,7 +169,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::load_file(const QString& filename)
 {
-    QFileInfo info(filename);
+    const QFileInfo info(filename);
     if (!info.isFile()) {
         QMessageBox msgBox;
         msgBox.setText("File " + filename + " is not a regular file");
@@ -218,7 +218,7 @@ void MainWindow::load_file(const QString& filename)
     }
 
     number_of_messages = bufrfile->num_messages();
-    QString totalMessages = " (" + QString::number(number_of_messages) + ")";
+    const QString totalMessages = " (" + QString::number(number_of_messages) + ")";
     ui->totalMessagesLabel->setText(totalMessages);
     ui->messageSpinBox->blockSignals(true);
     ui->messageSpinBox->setMinimum(start_message);
@@ -286,7 +286,7 @@ void MainWindow::load_message(const int message_num)
 
         number_of_subsets = loaded_message.number_of_subsets();
 
-        QString totalSubsets = " (" + QString::number(number_of_subsets) + ")";
+        const QString totalSubsets = " (" + QString::number(number_of_subsets) + ")";
         ui->totalSubsetsLabel->setText(totalSubsets);
 
         node_model.set_root_node(root_nodeitem);
@@ -441,7 +441,7 @@ void MainWindow::on_subsetSpinBox_valueChanged(int arg1)
 
 void MainWindow::open_file()
 {
-    QString filename = QFileDialog::getOpenFileName(this, "Open BUFR file");
+    const QString filename = QFileDialog::getOpenFileName(this, "Open BUFR file");
     if (filename.length() == 0) {
         return;
     }
@@ -468,7 +468,7 @@ void MainWindow::on_dumpTablesButton_clicked()
     QFont fixed_font = QFont("Consolas");
     fixed_font.setPointSize(10);
 #else
-    int pt = QFontDatabase::systemFont(QFontDatabase::GeneralFont).pointSize();
+    const int pt = QFontDatabase::systemFont(QFontDatabase::GeneralFont).pointSize();
     QFont fixed_font = QFontDatabase::systemFont(QFontDatabase::FixedFont);
     fixed_font.setPointSize(pt);
 #endif
@@ -527,7 +527,7 @@ void MainWindow::tree_selection_changed(const QItemSelection& selected, const QI
         if (name.startsWith("Subset:")) {
             QStringList parts = name.split(' ');
             assert(parts.size() == 2);
-            int found_subset = parts[1].toInt();
+            const int found_subset = parts[1].toInt();
             if (found_subset != current_subset) {
                 load_subset(found_subset);
             }
@@ -548,7 +548,7 @@ void MainWindow::tree_selection_changed(const QItemSelection& selected, const QI
 
 void MainWindow::on_treeView_customContextMenuRequested(const QPoint& pos)
 {
-    QModelIndex index = ui->treeView->indexAt(pos);
+    const QModelIndex index = ui->treeView->indexAt(pos);
     if (index.isValid() && index.model()->rowCount(index) > 0) {
         QMenu menu(this);
         auto* expandAllAction = new QAction("Expand all", this);
@@ -586,7 +586,7 @@ void MainWindow::changeEvent(QEvent* event)
 
 void MainWindow::treeview_expand_all()
 {
-    QModelIndex index = ui->treeView->selectionModel()->currentIndex();
+    const QModelIndex index = ui->treeView->selectionModel()->currentIndex();
     if (!index.isValid()) {
         return;
     }
@@ -599,7 +599,7 @@ void MainWindow::treeview_expand_all()
 
 void MainWindow::treeview_collapse_all()
 {
-    QModelIndex index = ui->treeView->selectionModel()->currentIndex();
+    const QModelIndex index = ui->treeView->selectionModel()->currentIndex();
     if (!index.isValid()) {
         return;
     }

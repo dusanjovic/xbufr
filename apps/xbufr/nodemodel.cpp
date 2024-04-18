@@ -113,7 +113,7 @@ QVariant NodeModel::data(const QModelIndex& index, int role) const
                 QString str;
                 const Item::Value value = item.values[0];
                 if (value.type == Item::ValueType::Double) {
-                    QString unit(item.unit.c_str());
+                    const QString unit(item.unit.c_str());
                     if (unit.startsWith("FLAG", Qt::CaseInsensitive)) {
                         str += QString::number((int)value.d);
                     } else {
@@ -130,7 +130,7 @@ QVariant NodeModel::data(const QModelIndex& index, int role) const
             return QString(node->data().unit.c_str());
         } break;
         case Column::Description: {
-            QString description = node->data().description.c_str();
+            const QString description = node->data().description.c_str();
             if (description.startsWith("TABLE B ENTRY - ")) {
                 return description.mid(16);
             }

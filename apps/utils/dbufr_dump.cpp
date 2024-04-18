@@ -72,7 +72,7 @@ int main(int argc, char* argv[])
     }
 
     try {
-        BUFRFile bufr_file(argv[1]);
+        const BUFRFile bufr_file(argv[1]);
 
         // std::cout.setstate(std::ios_base::badbit);
 

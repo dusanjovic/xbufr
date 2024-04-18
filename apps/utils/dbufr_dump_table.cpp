@@ -32,7 +32,7 @@ int main(int argc, char* argv[])
     }
 
     try {
-        BUFRFile bf(argv[1]);
+        const BUFRFile bf(argv[1]);
         if (bf.has_builtin_tables()) {
             bf.dump_tables(std::cout);
         } else {

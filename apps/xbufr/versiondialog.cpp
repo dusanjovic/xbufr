@@ -71,11 +71,11 @@ VersionDialog::VersionDialog(QWidget* parent)
     auto* layout = new QGridLayout(this);
     layout->setSizeConstraint(QLayout::SetFixedSize);
 
-    QString version = QLatin1String(VERSION_STR);
+    const QString version = QLatin1String(VERSION_STR);
 
     QString appRev;
 #ifdef GIT_REVISION
-    QString git_revision = QString::fromLatin1(GIT_REVISION_STR);
+    const QString git_revision = QString::fromLatin1(GIT_REVISION_STR);
     if (!git_revision.isEmpty()) {
         appRev = tr("From revision %1<br/>").arg(git_revision);
     }

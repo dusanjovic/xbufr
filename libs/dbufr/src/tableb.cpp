@@ -256,7 +256,7 @@ bool TableB::load_table(sqlite3* db, bool is_master)
         }
     }
 
-    int ctotal = sqlite3_column_count(statement);
+    const int ctotal = sqlite3_column_count(statement);
     if (ctotal != 7) {
         std::ostringstream estr;
         estr << __FILE__ << " " << __LINE__ << " ctotal != 7";
@@ -376,13 +376,13 @@ void TableB::insert_row(sqlite3* db,
     }
 
     DescriptorTableB existing_desc;
-    bool found = search_decriptor(FXY(f, x, y), existing_desc);
+    const bool found = search_decriptor(FXY(f, x, y), existing_desc);
 
     if (found) {
         // or if it's found but the descriptor is different insert new the one
-        int iscale = string_to_int(scale);
-        int irefval = string_to_int(refval);
-        int ibits = string_to_int(bits);
+        const int iscale = string_to_int(scale);
+        const int irefval = string_to_int(refval);
+        const int ibits = string_to_int(bits);
         if (!(existing_desc.scale() == iscale && existing_desc.reference() == irefval && existing_desc.bit_width() == ibits)) {
             std::cout << "Warning: replace b descriptor " << fxy_string << " " << trim(name) << " ";
             std::cout << trim(scale) << " " << trim(refval) << " " << trim(bits) << " ";
@@ -395,7 +395,7 @@ void TableB::insert_row(sqlite3* db,
 
     new_entries++;
     row_string = build_insert_string(origin, refval, name, bits, fxy_string, table_name, scale, mnemonic, unit);
-    int rc = sqlite3_exec(db, row_string.c_str(), nullptr, nullptr, nullptr);
+    const int rc = sqlite3_exec(db, row_string.c_str(), nullptr, nullptr, nullptr);
     if (rc != SQLITE_OK) {
         std::ostringstream estr;
         estr << "SQL error: sqlite3_exec " << rc << " " << sqlite3_errmsg(db) << '\n';
@@ -455,7 +455,7 @@ bool TableB::read_from_file_eccodes(sqlite3* db,
         split(line, '|', columns);
         const std::string fxy_string = columns[0];
 
-        int f = string_to_int(fxy_string.substr(0, 1));
+        const int f = string_to_int(fxy_string.substr(0, 1));
 
         if (f < 0 || f > 3) {
             std::ostringstream estr;
@@ -463,15 +463,15 @@ bool TableB::read_from_file_eccodes(sqlite3* db,
             throw std::runtime_error(estr.str());
         }
 
-        int x = string_to_int(fxy_string.substr(1, 2));
-        int y = string_to_int(fxy_string.substr(3, 3));
+        const int x = string_to_int(fxy_string.substr(1, 2));
+        const int y = string_to_int(fxy_string.substr(3, 3));
 
-        std::string mnemonic;
-        std::string name = columns[3];   // line.substr(8, 64);
-        std::string unit = columns[4];   // line.substr(73, 24);
-        std::string scale = columns[5];  // line.substr(98, 3);
-        std::string refval = columns[6]; // line.substr(102, 12);
-        std::string bits = columns[7];   // line.substr(115, 3);
+        const std::string mnemonic;
+        const std::string name = columns[3];   // line.substr(8, 64);
+        const std::string unit = columns[4];   // line.substr(73, 24);
+        const std::string scale = columns[5];  // line.substr(98, 3);
+        const std::string refval = columns[6]; // line.substr(102, 12);
+        const std::string bits = columns[7];   // line.substr(115, 3);
 
         insert_row(db, table_name, is_master, f, x, y, unit, bits, mnemonic, name, refval, scale, "eccodes");
     }
@@ -544,20 +544,20 @@ bool TableB::read_from_file_ncep(sqlite3* db,
         std::vector<std::string> columns;
         split(line, '|', columns);
 
-        int f = string_to_int(columns[0].substr(2, 1));
-        int x = string_to_int(columns[0].substr(4, 2));
-        int y = string_to_int(columns[0].substr(7, 3));
+        const int f = string_to_int(columns[0].substr(2, 1));
+        const int x = string_to_int(columns[0].substr(4, 2));
+        const int y = string_to_int(columns[0].substr(7, 3));
 
-        std::string scale = trim(columns[1]);
-        std::string refval = trim(columns[2]);
-        std::string bits = trim(columns[3]);
-        std::string unit = trim(columns[4]);
+        const std::string scale = trim(columns[1]);
+        const std::string refval = trim(columns[2]);
+        const std::string bits = trim(columns[3]);
+        const std::string unit = trim(columns[4]);
 
         std::vector<std::string> parts;
         split(columns[5], ';', parts);
 
-        std::string mnemonic = trim(parts[0]);
-        std::string name = trim(parts[2]);
+        const std::string mnemonic = trim(parts[0]);
+        const std::string name = trim(parts[2]);
 
         insert_row(db, table_name, is_master, f, x, y, unit, bits, mnemonic, name, refval, scale, "ncep");
     }

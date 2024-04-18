@@ -84,7 +84,7 @@ QVariant ValuesModel::data(const QModelIndex& index, int role) const
         assert(!item.values.empty());
         const Item::Value value = item.values[index.column()];
         if (value.type == Item::ValueType::Double) {
-            QString unit(item.unit.c_str());
+            const QString unit(item.unit.c_str());
             if (unit.startsWith("FLAG", Qt::CaseInsensitive)) {
                 return QString::number((int)value.d);
             }

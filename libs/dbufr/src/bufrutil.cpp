@@ -39,7 +39,7 @@ std::ios::pos_type seek_bufr(std::ifstream& file, const std::ios::pos_type start
     len_bufr = 0;
 
     file.seekg(0, std::ios::end);
-    std::ios::pos_type file_size = file.tellg();
+    const std::ios::pos_type file_size = file.tellg();
     file.seekg(0, std::ios::beg);
 
     while (!file.eof() && pos < start_pos + (std::ios::off_type)1024 && pos < file_size - (std::ios::off_type)4) {

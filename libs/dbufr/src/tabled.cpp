@@ -149,7 +149,7 @@ void TableD::dump2(const TableB& tb, std::ostream& ostr) const
 
             std::ostringstream parent_str;
             parent_str << std::setfill(' ') << "| " << std::setw(8) << d_desc.mnemonic() << " |";
-            std::string parent = parent_str.str();
+            const std::string parent = parent_str.str();
 
             std::vector<Descriptor> seq = d_desc.sequence();
 
@@ -157,7 +157,7 @@ void TableD::dump2(const TableB& tb, std::ostream& ostr) const
 
             for (size_t child = 0; child < seq.size(); child++) {
 
-                FXY child_fxy = seq[child].fxy();
+                FXY const child_fxy = seq[child].fxy();
                 int cf;
                 int cx;
                 int cy;
@@ -213,7 +213,7 @@ void TableD::dump2(const TableB& tb, std::ostream& ostr) const
                             this_child_str << " " << prefix << nemo << suffix << " ";
                         }
                     }
-                    std::string child_str = this_child_str.str();
+                    const std::string child_str = this_child_str.str();
 
                     if (children_line.size() + child_str.size() <= 67) {
                         children_line += child_str;
@@ -320,10 +320,10 @@ bool TableD::load_table(sqlite3* db, const bool is_master)
         if (rc == SQLITE_ROW) {
 
             std::string fxy = (const char*)sqlite3_column_text(statement, 0);
-            std::string mnemonic = (const char*)sqlite3_column_text(statement, 1);
-            std::string name = (const char*)sqlite3_column_text(statement, 2);
-            unsigned int nchild = sqlite3_column_int(statement, 3);
-            std::string childrens = (const char*)sqlite3_column_text(statement, 4);
+            const std::string mnemonic = (const char*)sqlite3_column_text(statement, 1);
+            const std::string name = (const char*)sqlite3_column_text(statement, 2);
+            const unsigned int nchild = sqlite3_column_int(statement, 3);
+            const std::string childrens = (const char*)sqlite3_column_text(statement, 4);
 
             std::vector<std::string> sub_descriptors;
             split(childrens, ',', sub_descriptors);
@@ -339,7 +339,7 @@ bool TableD::load_table(sqlite3* db, const bool is_master)
             d.set_description(name);
 
             for (unsigned int n = 0; n < nchild; n++) {
-                Descriptor d1(trim(sub_descriptors[n]));
+                const Descriptor d1(trim(sub_descriptors[n]));
                 d.add_child(d1);
             }
             add_descriptor(d);
@@ -415,8 +415,8 @@ bool TableD::read_from_file_eccodes(sqlite3* db,
     std::string line;
     while (std::getline(ifile, line)) {
 
-        std::string mnemonic;
-        std::string name;
+        const std::string mnemonic;
+        const std::string name;
         const std::string fxy = trim(get_left_of_delim(line, "=")).substr(1, 6);
 
         std::string children = trim(get_right_of_delim(line, "="));
@@ -557,12 +557,12 @@ bool TableD::read_from_file_ncep(sqlite3* db,
             split(sequence_line, '|', sequence_parts);
             split(sequence_parts[1], ';', name_parts);
 
-            int f = string_to_int(sequence_parts[0].substr(2, 1));
-            int x = string_to_int(sequence_parts[0].substr(4, 2));
-            int y = string_to_int(sequence_parts[0].substr(7, 3));
+            const int f = string_to_int(sequence_parts[0].substr(2, 1));
+            const int x = string_to_int(sequence_parts[0].substr(4, 2));
+            const int y = string_to_int(sequence_parts[0].substr(7, 3));
 
-            std::string fxy_string = FXY(f, x, y).as_str();
-            std::string mnemonic = trim(name_parts[0]);
+            const std::string fxy_string = FXY(f, x, y).as_str();
+            const std::string mnemonic = trim(name_parts[0]);
             std::string name = trim(name_parts[2]);
 
             // end of parsing first line of a new sequence
@@ -578,9 +578,9 @@ bool TableD::read_from_file_ncep(sqlite3* db,
                 std::vector<std::string> desc_parts;
                 split(sub_descriptor_line, '|', desc_parts);
 
-                int f_child = string_to_int(desc_parts[1].substr(1, 1));
-                int x_child = string_to_int(desc_parts[1].substr(3, 2));
-                int y_child = string_to_int(desc_parts[1].substr(6, 3));
+                const int f_child = string_to_int(desc_parts[1].substr(1, 1));
+                const int x_child = string_to_int(desc_parts[1].substr(3, 2));
+                const int y_child = string_to_int(desc_parts[1].substr(6, 3));
 
                 children += FXY(f_child, x_child, y_child).as_str();
 

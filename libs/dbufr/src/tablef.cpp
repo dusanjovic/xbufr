@@ -37,7 +37,7 @@
 
 TableF::~TableF()
 {
-    int rc = sqlite3_close_v2(m_db);
+    const int rc = sqlite3_close_v2(m_db);
     if (rc != SQLITE_OK) {
         std::ostringstream estr;
         estr << "Error closing database: " << sqlite3_errmsg(m_db);
@@ -91,7 +91,7 @@ void TableF::open_db()
         dbfile = "bufr_tables.db";
     }
 
-    int rc = sqlite3_open_v2(dbfile.c_str(), &m_db, SQLITE_OPEN_READONLY, nullptr);
+    const int rc = sqlite3_open_v2(dbfile.c_str(), &m_db, SQLITE_OPEN_READONLY, nullptr);
     if (rc != SQLITE_OK) {
         std::ostringstream ostr;
         ostr << "Can't open database: " << dbfile << "\n";
@@ -307,7 +307,7 @@ void TableF::create_table(sqlite3* db, const std::string& table_name)
          << "    origin    TEXT,\n"
          << "    PRIMARY KEY (fxy,dep_fxy,dep_val,val) );";
 
-    int rc = sqlite3_exec(db, ostr.str().c_str(), nullptr, nullptr, nullptr);
+    const int rc = sqlite3_exec(db, ostr.str().c_str(), nullptr, nullptr, nullptr);
     if (rc != SQLITE_OK) {
         std::cerr << "SQL error: sqlite3_exec " << rc << " " << sqlite3_errmsg(db) << '\n';
         std::cerr << ostr.str() << '\n';
@@ -343,7 +343,7 @@ void TableF::insert_row(sqlite3* db,
     sqls << ", '" << origin << "'";
     sqls << ");";
 
-    int rc = sqlite3_exec(db, sqls.str().c_str(), nullptr, nullptr, nullptr);
+    const int rc = sqlite3_exec(db, sqls.str().c_str(), nullptr, nullptr, nullptr);
     if (rc != SQLITE_OK) {
         std::ostringstream estr;
         estr << "SQL error: sqlite3_exec " << rc << " " << sqlite3_errmsg(db) << '\n';
@@ -405,13 +405,13 @@ bool TableF::read_from_file_ncep(sqlite3* db,
             split(sequence_line, '|', sequence_parts);
             split(sequence_parts[1], ';', name_parts);
 
-            int f = string_to_int(sequence_parts[0].substr(2, 1));
-            int x = string_to_int(sequence_parts[0].substr(4, 2));
-            int y = string_to_int(sequence_parts[0].substr(7, 3));
+            const int f = string_to_int(sequence_parts[0].substr(2, 1));
+            const int x = string_to_int(sequence_parts[0].substr(4, 2));
+            const int y = string_to_int(sequence_parts[0].substr(7, 3));
 
-            std::string fxy_string = FXY(f, x, y).as_str();
-            std::string mnemonic = trim(name_parts[0]);
-            std::string name = trim(name_parts[1]); // CODE or FLAG
+            const std::string fxy_string = FXY(f, x, y).as_str();
+            const std::string mnemonic = trim(name_parts[0]);
+            const std::string name = trim(name_parts[1]); // CODE or FLAG
 
             std::string list_of_dep_fxy;
             std::string list_of_dep_val;

@@ -45,7 +45,7 @@ static const FXY fxy_031021 = FXY(0, 31, 21);
 void BUFRDecoder::parse(std::ifstream& ifile, const std::ios::pos_type file_offset)
 {
     size_t len_bufr;
-    std::ios::pos_type pos = seek_bufr(ifile, file_offset, len_bufr);
+    const std::ios::pos_type pos = seek_bufr(ifile, file_offset, len_bufr);
 
     m_start_pos = file_offset;
     m_end_pos = file_offset + static_cast<std::ios::pos_type>(len_bufr);
@@ -1299,7 +1299,7 @@ void BUFRDecoder::read_sequence_descriptor(const FXY fxy,
             child_item.name = sub_fxy.as_str();
             child_item.type = Item::Type::Element;
             read_element_descriptor(sub_fxy, br, child_item, indent);
-            std::string s_fxy = child_item.as_string();
+            const std::string s_fxy = child_item.as_string();
 
             desc_d.add_child(Descriptor(s_fxy));
         }
@@ -1451,7 +1451,7 @@ void BUFRDecoder::collect_code_flags(NodeItem* ni)
                 assert(!item.values.empty());
                 assert(item.values[0].type == Item::ValueType::Double);
                 assert(item.values[0].d < INT_MAX);
-                uint64_t f = (uint64_t)fxy.as_int() << 32 | (unsigned int)item.values[0].d;
+                const uint64_t f = (uint64_t)fxy.as_int() << 32 | (unsigned int)item.values[0].d;
                 m_code_meaning[f] = "";
             }
         } else if (desc.is_flag()) {
@@ -1467,7 +1467,7 @@ void BUFRDecoder::collect_code_flags(NodeItem* ni)
 
                 for (int i = 0; i < item.bits; i++) {
                     if (flag_bits[i] == '1') {
-                        uint64_t f = (uint64_t)fxy.as_int() << 32 | (i + 1);
+                        const uint64_t f = (uint64_t)fxy.as_int() << 32 | (i + 1);
                         m_code_meaning[f] = "";
                     }
                 }
@@ -1496,7 +1496,7 @@ void BUFRDecoder::build_code_flags(NodeItem* ni)
                 assert(!item.values.empty());
                 assert(item.values[0].type == Item::ValueType::Double);
                 assert(item.values[0].d < INT_MAX);
-                uint64_t f = (uint64_t)fxy.as_int() << 32 | (unsigned int)item.values[0].d;
+                const uint64_t f = (uint64_t)fxy.as_int() << 32 | (unsigned int)item.values[0].d;
                 item.value_tooltip = m_code_meaning[f];
             } else {
                 item.value_tooltip = "CODE is missing";
@@ -1526,7 +1526,7 @@ void BUFRDecoder::build_code_flags(NodeItem* ni)
 
                 for (int i = 0; i < item.bits; i++) {
                     if (flag_bits[i] == '1') {
-                        uint64_t f = (uint64_t)fxy.as_int() << 32U | (i + 1);
+                        const uint64_t f = (uint64_t)fxy.as_int() << 32U | (i + 1);
                         tooltip_str += fmt::format("\n{} {}", i + 1, m_code_meaning[f]);
                     }
                 }
@@ -1660,7 +1660,7 @@ void BUFRDecoder::read_table_a_ncep(std::vector<FXY>& descriptor_list, BitReader
         }
         Item item_table_a_entry;
         read_element_descriptor(descriptor_list[desc_idx], br, item_table_a_entry, 0);
-        std::string table_a_entry = item_table_a_entry.as_string();
+        const std::string table_a_entry = item_table_a_entry.as_string();
 
         desc_idx = 3;
         descriptor_list[desc_idx].fxy(f, x, y);
@@ -1669,7 +1669,7 @@ void BUFRDecoder::read_table_a_ncep(std::vector<FXY>& descriptor_list, BitReader
         }
         Item item_line1;
         read_element_descriptor(descriptor_list[desc_idx], br, item_line1, 0);
-        std::string table_a_line1 = item_line1.as_string();
+        const std::string table_a_line1 = item_line1.as_string();
 
         desc_idx = 4;
         descriptor_list[desc_idx].fxy(f, x, y);
@@ -1678,7 +1678,7 @@ void BUFRDecoder::read_table_a_ncep(std::vector<FXY>& descriptor_list, BitReader
         }
         Item item_line2;
         read_element_descriptor(descriptor_list[desc_idx], br, item_line2, 0);
-        std::string table_a_line2 = item_line2.as_string();
+        const std::string table_a_line2 = item_line2.as_string();
 
         m_tablea->add_descriptor(DescriptorTableA(0, 0, 0, table_a_entry, table_a_line1 + table_a_line2));
     }
@@ -1712,7 +1712,7 @@ void BUFRDecoder::read_table_a_ecmwf(std::vector<FXY>& descriptor_list, BitReade
     }
     Item item_table_a_entry;
     read_element_descriptor(descriptor_list[desc_idx], br, item_table_a_entry, 0);
-    std::string table_a_entry = item_table_a_entry.as_string();
+    const std::string table_a_entry = item_table_a_entry.as_string();
 
     desc_idx = 1;
     descriptor_list[desc_idx].fxy(f, x, y);
@@ -1721,7 +1721,7 @@ void BUFRDecoder::read_table_a_ecmwf(std::vector<FXY>& descriptor_list, BitReade
     }
     Item item_line1;
     read_element_descriptor(descriptor_list[desc_idx], br, item_line1, 0);
-    std::string table_a_line1 = item_line1.as_string();
+    const std::string table_a_line1 = item_line1.as_string();
 
     desc_idx = 2;
     descriptor_list[desc_idx].fxy(f, x, y);
@@ -1730,7 +1730,7 @@ void BUFRDecoder::read_table_a_ecmwf(std::vector<FXY>& descriptor_list, BitReade
     }
     Item item_line2;
     read_element_descriptor(descriptor_list[desc_idx], br, item_line2, 0);
-    std::string table_a_line2 = item_line2.as_string();
+    const std::string table_a_line2 = item_line2.as_string();
 
     m_tablea->add_descriptor(DescriptorTableA(0, 0, 0, table_a_entry, table_a_line1 + table_a_line2));
 
