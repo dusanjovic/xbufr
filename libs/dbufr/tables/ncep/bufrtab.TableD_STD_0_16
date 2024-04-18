@@ -1,7 +1,7 @@
 Table D STD |  0 | 16
 #
 # Standard BUFR Table D, Master Table 0, Version 16
-# This file was generated: 2021/05/11 22:55:56
+# This file was generated: 2022/11/08 16:32:28
 #
 #========================================================================================================
 # F-XX-YYY | MNEMONIC   ;DCOD ; NAME           <-- sequence definition
@@ -324,7 +324,7 @@ Table D STD |  0 | 16
            | 3-01-021 > | 
            | 0-20-111 > | x-axis error ellipse major component
            | 0-20-112 > | y-axis error ellipse minor component
-           | 0-20-113 > | z-axis  error ellipse component
+           | 0-20-113 > | z-axis error ellipse component
            | 0-20-114 > | Angle of x-axis in error ellipse
            | 0-20-115 > | Angle of z-axis in error ellipse
            | 0-20-116 > | Emission height of cloud stroke

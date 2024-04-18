@@ -1,7 +1,7 @@
 Table F LOC |  0 | 7 |  1
 #
 # Local BUFR Table CODE/FLAG, Master Table 0, Originating Center 7, Version 1
-# This file was generated: 2021/05/10 20:34:01
+# This file was generated: 2023/05/30 19:03:19
 #
 #========================================================================================================
 # F-XX-YYY | MNEMONIC ; CODE               <-- code table definition
@@ -615,7 +615,8 @@ Table F LOC |  0 | 7 |  1
               | 4 > | Winds-by-height level (upper-air profile reports)
               | 5 > | Tropopause level (upper-air profile reports)
               | 6 > | Single level report, or report not on any of the levels denoted by other values (e.g. aircraft, satellite wind, precipitable water, etc.)
-              | 7   | Auxiliary levels generated via interpolation from spanning levels (upper-air profile reports)
+              | 7 > | Auxiliary levels generated via interpolation from spanning levels (upper-air profile reports)
+              | 10   | High-resolution level (upper-air profile reports)
 
   0-08-201 | .RE.... ; CODE
               | 0 > | "M" indicator present - the true value of the following parameter is below the minimum value which can be assessed with the system in use
@@ -4444,9 +4445,12 @@ Table F LOC |  0 | 7 |  1
               | 511 > | Land surface by block and station number (synoptic, both unrestricted and restricted WMO Resolution 40)
               | 512 > | Land surface by call letters (METAR)
               | 514 > | Mobile land surface (synoptic)
-              | 522 > | Ship with name
-              | 523 > | Ship without name (report ID set to "SHIP")
-              | 531 > | C-MAN platform
+              | 522 > | Ship with name (TAC)
+              | 523 > | Ship without name (report ID set to "SHIP") (TAC)
+              | 524 > | Ship with name (BUFR)
+              | 525 > | Ship without name (report ID set to "SHIP") (BUFR)
+              | 530 > | C-MAN platform (BUFR)
+              | 531 > | C-MAN platform (TAC)
               | 532 > | Tide gauge report
               | 534 > | Coast Guard tide gauge report
               | 540 > | Mesonet surface
@@ -4505,6 +4509,7 @@ Table F LOC |  0 | 7 |  1
               | 29 > | Space environment (satellite)
               | 30 > | Calibration dataset (satellite)
               | 31 > | Oceanographic data
+              | 32 > | Lidar (ground-based)
               | 101 > | Image data
               | 255   | Other category
 
@@ -4534,6 +4539,7 @@ Table F LOC |  0 | 7 |  1
               | 0 > | Synoptic observations (SHIP)
               | 6 > | One-hour observations from automated stations
               | 7 > | n-minute observations from AWS stations
+              | 15 > | Uncrewed surface vehicle
               | 20 > | Climatological observations (CLIMAT SHIP)
               | 25 > | Buoy observation (BUOY)
               | 30 > | Tide gauge
@@ -4590,6 +4596,7 @@ Table F LOC |  0 | 7 |  1
               | 1 > | Ozone vertical sounding
               | 2 > | Total ozone
               | 3 > | Acid rain
+              | 4 > | Aerosol
            | 0-55-020=9
               | 0 > | Trajectories, analysis or forecast
            | 0-55-020=10
@@ -4646,6 +4653,7 @@ Table F LOC |  0 | 7 |  1
               | 5 > | XBT/XCTD profiles (TESAC)
               | 6 > | Waves reports
               | 7 > | Tsunameter data
+              | 8 > | Glider data
            | 0-55-020=101
               | 0 > | Multi-purpose VIS/IR imagery
               | 1 > | Conical scanning MW imagery (intermediate frequencies)
@@ -4654,7 +4662,9 @@ Table F LOC |  0 | 7 |  1
               | 4 > | Imagery with special viewing geometry
               | 5 > | Lightning imagery
               | 6 > | High resolution shortwave imagery for land observation
-              | 7   | SMOS data
+              | 7 > | SMOS data
+           | 0-55-020=32
+              | 0   | Wind, cloud, aerosol
 
   0-55-022 | TABLASL ; CODE
            | 0-55-020=0
@@ -4776,8 +4786,16 @@ Table F LOC |  0 | 7 |  1
               | 44 > | Japan high-density winds - infrared (long-wave) (BUFR)
               | 45 > | Japan high-density winds - visible (BUFR)
               | 46 > | Japan high-density winds - water vapor imager (BUFR)
+              | 47 > | Japan high-density winds - infrared (long-wave) (BUFR)
+              | 48 > | Japan high-density winds - visible (BUFR)
+              | 49 > | Japan high-density winds - water vapor imager (BUFR)
               | 50 > | GMS high-density winds - infrared (long-wave) (BUFR)
               | 51 > | GMS high-density winds - water vapor imager (BUFR)
+              | 52 > | GOES high-density winds - infrared (long-wave) (BUFR)
+              | 53 > | GOES high-density winds - water vapor imager deep-layer (BUFR)
+              | 54 > | GOES high-density winds - visible (BUFR)
+              | 55 > | GOES high-density winds - water vapor imager cloud-top (BUFR)
+              | 56 > | GOES high-density winds - infrared (short-wave) (BUFR)
               | 61 > | Europe low-density winds - infrared (long-wave) (SATOB)
               | 62 > | Europe low-density winds - visible (SATOB)
               | 63 > | Europe low-density winds - water vapor imager (SATOB)
@@ -4785,14 +4803,16 @@ Table F LOC |  0 | 7 |  1
               | 65 > | Europe high-density winds - visible (BUFR)
               | 66 > | Europe high-density winds - water vapor imager (BUFR)
               | 67 > | Europe high-density winds - infrared (long-wave) (BUFR)
-              | 68 > | Europe high-density winds - visible (long-wave) (BUFR)
-              | 69 > | Europe high-density winds - water vapor imager (long-wave) (BUFR)
+              | 68 > | Europe high-density winds - visible (BUFR)
+              | 69 > | Europe high-density winds - water vapor imager (BUFR)
               | 70 > | MODIS AQUA/TERRA winds - infrared (long-wave) (BUFR)
               | 71 > | MODIS AQUA/TERRA winds - water vapor imager (BUFR)
               | 72 > | SSEC/WISC LEO-GEO winds
               | 80 > | METOP AVHRR winds - infrared (long-wave) (BUFR)
+              | 81 > | METOP AVHRR winds - infrared (long-wave) (BUFR)
               | 90 > | NPP VIIRS winds - infrared (long-wave) (BUFR)
               | 91 > | NPP VIIRS winds - infrared (long-wave) (BUFR)
+              | 99 > | CIMSS tropical cyclone winds
            | 0-55-020=6
               | 1 > | NeXRaD level 3 radial wind superob
               | 2 > | NeXRaD level 2.5 radial wind superob
@@ -4974,6 +4994,7 @@ Table F LOC |  0 | 7 |  1
               | 52 > | NOAA-17 and METOP-2 AVHRR brightness temperatures (cloudy or over land)
               | 53 > | NOAA-18 AVHRR brightness temperatures (clear and over ocean)
               | 54 > | NOAA-18 AVHRR brightness temperatures (cloudy or over land)
+              | 100 > | MTG IRS radiances from principal components
               | 123 > | Antenna temperatures - AMSU-A
               | 201 > | DMSP SSMI/S brightness temperatures
               | 202 > | NPP CrIS radiances
@@ -4998,6 +5019,7 @@ Table F LOC |  0 | 7 |  1
               | 5 > | Subsurface float profiles (BUFR)
               | 6 > | XBT/XCTD (TESAC) profiles (BUFR)
               | 7 > | Along track (TRACKOB) observations (BUFR)
+              | 8 > | Marine mammal profiles
               | 11 > | NLSA ERS-2 sea-surface height anomaly (high-resolution regional)
               | 12 > | NLSA TOPEX sea-surface height anomaly (high-resolution regional)
               | 13 > | NLSA TOPEX sea-surface height anomaly (high-resolution regional)
@@ -5018,7 +5040,7 @@ Table F LOC |  0 | 7 |  1
               | 114 > | NAVOCEANO JASON-2 altimeter wind/wave (fast delivery)
               | 115 > | CNES JASON-2 altimeter wind/wave (OGDR)
               | 116 > | SSALTO/DUACS ENVISAT sea-surface height anomaly (high-resolution global)
-              | 117 > | NAVOCEANO CRYOSAT-2 sea-surface height anomaly (high-resolution global)
+              | 117 > | NAVOCEANO CRYOSAT-2 sea-surface height anomaly (high-resolution global) (IGDR)
               | 118 > | NAVOCEANO SARAL sea-surface height anomaly (high-resolution global) (OGDR)
               | 119 > | NAVOCEANO SARAL sea-surface height anomaly (high-resolution global) (IGDR)
               | 120 > | NAVOCEANO CRYOSAT-2 altimeter wind/wave (fast delivery)
@@ -5037,6 +5059,10 @@ Table F LOC |  0 | 7 |  1
               | 133 > | NAVOCEANO Sentinel 3B altimeter wind/wave (fast delivery)
               | 134 > | CNES Sentinel 3A altimeter wind/wave (OGDR)
               | 135 > | CNES Sentinel 3B altimeter wind/wave (OGDR)
+              | 136 > | NAVOCEANO CRYOSAT-2 sea-surface height anomaly (high-resolution global) (OGDR)
+              | 137 > | NAVOCEANO Sentinel 6A sea-surface height anomaly (high-resolution global) (NRT)
+              | 138 > | NAVOCEANO Sentinel 6A sea-surface height anomaly (high-resolution global) (STC)
+              | 139 > | NAVOCEANO Sentinel 6A altimeter wind/wave (fast delivery)
            | 0-55-020=255
               | 1 > | Mesonet - Denver Urban Drainage (MADIS)
               | 2 > | Mesonet - RAWS National Interagency Fire Center (MADIS)
