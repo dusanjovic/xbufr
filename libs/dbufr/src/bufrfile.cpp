@@ -71,7 +71,7 @@ BUFRFile::BUFRFile(const std::string& filename)
     d->ifile.open(filename.c_str(), std::ios::in | std::ios::binary);
     if (!d->ifile) {
         std::ostringstream ostr;
-        ostr << "Error openning file: " << filename;
+        ostr << "Error opening file: " << filename;
         throw std::runtime_error(ostr.str());
     }
 

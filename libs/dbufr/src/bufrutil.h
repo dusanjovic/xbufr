@@ -21,6 +21,7 @@
 
 #pragma once
 
+#include <cstdint>
 #include <iostream>
 
 std::ios::pos_type seek_bufr(std::ifstream& file, const std::ios::pos_type start_pos, size_t& len_bufr);
