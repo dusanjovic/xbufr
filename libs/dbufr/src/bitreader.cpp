@@ -24,9 +24,11 @@
 #include "fmt/format.h"
 
 #include <array>
+#include <cassert>
 #include <climits>
 #include <iostream>
 #include <stdexcept>
+#include <vector>
 
 BitReader::BitReader(const uint8_t* const data, const size_t len, const size_t off)
     : buffer(data)
